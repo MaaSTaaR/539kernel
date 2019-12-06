@@ -23,5 +23,4 @@ print_char:
 done:
 	ret
 	
-hello_string db 'Hello World!, From Simple Assembly Kernel!', 0
-;times 512-($-$$) db 0
+hello_string db 'Hello World!, From Simple Assembly 539kernel!', 0
