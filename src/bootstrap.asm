@@ -11,12 +11,7 @@ start:
 	; For backward compatibility, when the bootloader starts, the execution environment will be in "Real Mode", 16-bit.
 	mov ax, 07C0h
 	mov ds, ax
-	
-	; ... ;
-	mov ah, 00h
-	mov al, 07h
-	int 10h
-	
+		
 	; ... ;
 	
 	; == Printing == ;
@@ -29,7 +24,7 @@ start:
 	; For an example of using service "0Eh" to print "Hello" character by character, please refer to "../examples/bootstrap/1/".
     
 	mov si, title_string
-	call print_string
+	call print_string ; "CALL" is used instead of "JMP" because we would like to return to the next instruction after "print_string" finishes.
 	
 	mov si, message_string
 	call print_string
@@ -42,36 +37,56 @@ start:
 	; [MQH] 26 Nov 2019
 	; BIOS provides disk services through intrrupt 13h. The value of the register "ah" decides which disk service that we are requesting from BIOS.
 	
+	; The Disk Service "02h" loads sectors to the memory. The memory location that we would like to load our kernel in should be decided
+	; before calling "int 13h". There are two parts of this location. The first part (segment selector) resides in the register "ES" while 
+	; the other part (offset) resides in the register "BX".
+	;
+	; x86 Segment Registers:    CS: for code segment. 
+	;                           DS, ES, FS, and GS: for 4 data segments.
+	;                           SS: for stack segment.
+	; They are 16-bit registers that hold "segment selectors"
 	mov ax, 1000h
 	mov es, ax
-
-	;mov bp, ax
-	;mov sp, ax
-	;mov ds, ax	
-;	mov cs, ax
 	
-	mov ah, 02h
-	mov al, 01h
-	mov ch, 0h
-	mov cl, 02h
-	mov dh, 0h
-	mov dl, 80h ; Drive to read from. Load from hard disk
-	mov bx, 0h
-	int 13h
+	mov ah, 02h     ; Requesting the service of reading disk sectors
+	mov al, 01h     ; Number of sectors to read (How many sectors to read?)
+	mov ch, 0h      ; Track number
+	mov cl, 02h     ; Sector number
+	mov dh, 0h      ; Head number
+	mov dl, 80h     ; Drive to read from. (0 = Floppy. 80h = Drive #0. 81h = Drive #1)
+	mov bx, 0h      ; ES:BX = Pointer to the buffer that the content of the sector will be loaded in.
+	int 13h         ; BIOS Disk Services
 	
-	jc load_error
+	; The instruction "jc" jumps to a memory location when CF = 1 (jc = jump if carry).
+	; CF (or carry flag) is the first bit of EFLAG register in x86. The BIOS service (13h,02h)
+	; clear CF (that is, put 0 in CF) when everything is fine. But if there is some error
+	; it's going to set CF (that is, put 1 in CF). Error code will be in "ah".
+	;
+	; If any error happens in loading our kernel. The bootloader is going to jump to the label "kernel_load_error".
+	jc kernel_load_error
 	
-	;mov ax, 10h
-	;mov sp, ax
-	;mov bp, ax
-	;mov cs, ax
-	;mov ds, ax
-	
+	; If the loading has been performed correctly. Jump to the kernel's code which resides on 1000h:0000 according
+	; to ES:BX values before calling (int 13h).
+	;
+	; There is a difference between "JMP" and "CALL" inctructions. The first one doesn't store returning information
+	; in the stack while the later does. Because we are not going to return from kernel to the bootloader, we don't
+	; need to store return information.
 	jmp 1000h:0000
+
+; ... ;
+; ... ;
+
+; When the bootloader fails to load the kernel. A nice message is printted for the user.
+kernel_load_error:
+	mov si, load_error_string
+	call print_string
 	
-	; ... ;
-	
-	jmp $
+	; "$" is a special expressions in NASM. It means the starting memory address of current instruction, that means
+	; the following instruction is going to loop forever. 
+	jmp $	
+
+; ... ;
+; ... ;
 
 print_string:
 	mov ah, 0Eh
@@ -88,45 +103,25 @@ print_char:
 	lodsb
 	
 	cmp al, 0
-	je done
+	je printing_finished
 	
 	int 10h
 	
 	jmp print_char
 
-done:
-    mov al, 10d ; New Line
+printing_finished:
+    mov al, 10d ; Print new line
     int 10h
     
+    ; print_string is a procedure (or function), therefore we should return. It is called by using "CALL" instead of "JMP".
 	ret
-	
-;;;;------------
 
-load_error:
-	;;;;;;;;
-	mov bh, ah
-	
-	mov ah, 0Eh
-	mov al, 'a'	
-	int 10h
-	
-	cmp bh, 20h
-	je error_01
-	
-	jmp $
-	
-	;;;;;;;;;
-	
-error_01:
-	;;;;;;;;
-	mov ah, 0Eh
-	mov al, '1'	
-	int 10h
-	;;;;;;;;;
-	
+; ... ;
+; ... ;
 
-title_string db 'The Bootloader of 539kernel.', 0
-message_string db 'The kernel is loading...', 0
+title_string        db  'The Bootloader of 539kernel.', 0
+message_string      db  'The kernel is loading...', 0
+load_error_string   db  'The kernel cannot be loaded', 0
 
 times 510-($-$$) db 0
 dw 0xAA55
