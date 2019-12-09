@@ -81,7 +81,7 @@ kernel_load_error:
 	mov si, load_error_string
 	call print_string
 	
-	; "$" is a special expressions in NASM. It means the starting memory address of current instruction, that means
+	; "$" is a special expression in NASM. It means the starting memory address (or assembly position?) of current instruction, that means
 	; the following instruction is going to loop forever. 
 	jmp $	
 
@@ -119,9 +119,30 @@ printing_finished:
 ; ... ;
 ; ... ;
 
+; [MQH] 9 Dec 2019
+; "DB" is one of pseudo-instructions which is provided by NASM. A source line in NASM follows the following format
+; label: instruction operands ; comment
+; The label is optional and even the colon after the label is optional.
+; "DB" is used to declare initialized data. The "B" in "DB" means byte.
+; the part ", 0" means that the last byte will be 0. In some way resembles
+; nul character in C strings.
+;
+; Put the string in the output of this assembly file. Byte by byte, and the address of
+; this string will be in the label, so we can reach the string inside the assembly source code.
 title_string        db  'The Bootloader of 539kernel.', 0
 message_string      db  'The kernel is loading...', 0
 load_error_string   db  'The kernel cannot be loaded', 0
 
+; [MQH] 9 Dec 2019
+; "TIMES" is an NASM pseudo-instruction which repeats an instruction a number of specific times.
+; The second operand of "TIMES" is the number of repetitions.
+; As we mentioned before "$" means the starting address (or assembly position?) of current instruction.
+; "$$" is another special expression which means the starting address (or assembly position?) of current section.
+; So, we know that the size of bootstrap should be 512 byte. Two bytes are represent the magic code in the last line
+; so 510 bytes remains for us. Our code starts from position $$ and we reached position $. Therefore, $ - $$ gives
+; us the size of our code. So, 510 - ( $ - $$ ) gives us the remaining size of the 512 bytes and fills it with zeros
+; by using "DB".
 times 510-($-$$) db 0
+
+; Put the magic code of bootloader in the end of assembly file's output. "W" means word.
 dw 0xAA55
