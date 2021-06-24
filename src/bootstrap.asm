@@ -22,13 +22,12 @@ start:
 	;
 	; ah = 0Eh means that we wish to print a character in TTY mode.
 	; For an example of using service "0Eh" to print "Hello" character by character, please refer to "../examples/bootstrap/1/".
-    
+	
 	mov si, title_string
 	call print_string ; "CALL" is used instead of "JMP" because we would like to return to the next instruction after "print_string" finishes.
 	
 	mov si, message_string
 	call print_string
-
 	
 	; ... ;
 	
@@ -135,7 +134,7 @@ load_error_string   db  'The kernel cannot be loaded', 0
 
 ; [MQH] 9 Dec 2019
 ; "TIMES" is an NASM pseudo-instruction which repeats an instruction a number of specific times.
-; The second operand of "TIMES" is the number of repetitions.
+; The first operand of "TIMES" is the number of repetitions.
 ; As we mentioned before "$" means the starting address (or assembly position?) of current instruction.
 ; "$$" is another special expression which means the starting address (or assembly position?) of current section.
 ; So, we know that the size of bootstrap should be 512 byte. Two bytes are represent the magic code in the last line
