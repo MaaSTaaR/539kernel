@@ -1,7 +1,8 @@
 ASM = nasm
 CC = gcc
 BOOTSTRAP_FILE = bootstrap.asm 
-#KERNEL_FILE = simple_kernel.asm
+SIMPLE_KERNEL = simple_kernel.asm
+INIT_KERNEL_FILES = start.asm
 KERNEL_FILES = main.c
 
 # -m32 means generate 32-bit code. See "Machine-Dependent Options" section in gcc man page for details. Under "x86 Options" section "-m flag".
@@ -44,19 +45,53 @@ KERNEL_FILES = main.c
 KERNEL_FLAGS = -Wall -m32 -c -ffreestanding -fno-pie -fno-asynchronous-unwind-tables #-S
 #  -O1 -fno-pie 
 KERNEL_OBJECT = -o kernel.elf
-DEBUG = #-S
 
-build: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
+build:
+	echo Please Choose Type
+	
+kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
-	#$(ASM) -f bin $(KERNEL_FILE) -o kernel.o
+	$(ASM) -f bin $(INIT_KERNEL_FILES) -o starter.o
 	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
-	#as --32 main.s -o kernel.elf
+	objcopy -O binary kernel.elf kernel.o
+	ld -Ttext 0x1000 -b binary --oformat=binary starter.o kernel.o -o 539kernel
+	dd if=bootstrap.o of=kernel.img
+	dd seek=1 conv=sync if=539kernel of=kernel.img bs=512
+	dd seek=2 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
+	bochs -f bochs
+	#qemu-system-x86_64 -s kernel.img
+	
+fromgas: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
+	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
+	as --32 main.s -o kernel.elf
 	objcopy -O binary kernel.elf kernel.o
 	dd if=bootstrap.o of=kernel.img
 	dd seek=1 conv=sync if=kernel.o of=kernel.img bs=512
-	qemu-system-x86_64 $(DEBUG) -s kernel.img
+	qemu-system-x86_64 -s kernel.img
+
+debug: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
+	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
+	$(ASM) -f bin $(INIT_KERNEL_FILES) -o starter.o
+	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
+	objcopy -O binary kernel.elf kernel.o
+	ld -Ttext 0x1000 -b binary --oformat=binary starter.o kernel.o -o 539kernel
+	dd if=bootstrap.o of=kernel.img
+	dd seek=1 conv=sync if=539kernel of=kernel.img bs=512
+	qemu-system-x86_64 -S -s kernel.img
+
+generateasm: $(KERNEL_FILE)
+	$(CC) $(KERNEL_FLAGS) -S $(KERNEL_FILES)
+
+simplekernel: $(BOOTSTRAP_FILE) $(SIMPLE_KERNEL)
+	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
+	$(ASM) -f bin $(SIMPLE_KERNEL) -o kernel.o
+	dd if=bootstrap.o of=kernel.img
+	dd seek=1 conv=sync if=kernel.o of=kernel.img bs=512
+	qemu-system-x86_64 -s kernel.img
+
 
 clean:
 	rm -f *.o
 	rm -f *.elf
 	rm -f *.img
+	rm -f 539kernel
