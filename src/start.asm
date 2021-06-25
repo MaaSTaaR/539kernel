@@ -14,20 +14,19 @@ start:
 	
 	cli
 	;mov eax, ds
-	add eax, gdtr
+	mov eax, gdtr
 	mov ebx, [gdtr]
-	mov ecx, [end_gdtr]
-	lgdt [gdtr-end_gdtr]
+	lgdt [gdtr] ; 0x00010017
 	
 	;jmp $
 	
-	mov si, gdt_message
-	call print_string
+	;mov si, gdt_message
+	;call print_string
 	
 	;; Video
-	;mov ah, 0h
-	;mov al, 03h
-	;int 10h
+	mov ah, 0h
+	mov al, 03h
+	int 10h
 	
 	call enter_protected_mode
 	
@@ -35,7 +34,9 @@ start:
 	
 	;jmp $
 	
-	call 08h:start_kernel
+	mov eax, start_kernel
+;	add eax, 0x10000
+	call 08h:( 0x09000 + start_kernel )
 	
 	jmp $
 
@@ -55,6 +56,9 @@ gdt_message 	db '    GDT Loaded', 0
 
 ; The values of the decriptors from Basekernel (kernelcode.S) (https://github.com/dthain/basekernel)
 
+db 'BG'
+
+align 4
 gdt:
 	null_descriptor				: 	dw 0, 0, 0, 0
 	kernel_code_descriptor		: 	dw 0xffff, 0x0000, 9a00h, 0x00cf
@@ -63,12 +67,12 @@ gdt:
 	userspace_data_descriptor	: 	dw 0xffff, 0x0000, 0xf200, 0x00cf
 
 db 'BGR'	
-align 4
-gdtr:
-	gdt_size			: 	dw 40d ;( 5 * 8 ) = 28h
-	gdt_base_address	: 	dd gdt
-end_gdtr:
 
+gdtr:
+	gdt_size			: 	dw ( 5 * 8 ) ;= 28h
+	gdt_base_address	: 	dd 0x09000 + gdt ; TODO: I think shifting is more correct way
+
+db 'BeforeStartKernel'
 start_kernel:
 	mov eax, 10h
 	mov ds, eax

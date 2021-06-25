@@ -10,14 +10,14 @@ int main()
 	
 	//*((int*)0xb0000)=0x539;
 	//asm( "movl $0x07690748,0xb8000" );
-	asm( "1: jmp 1" );
+	//asm( "1: jmp 1" );
 	
 	//*((int*)0xb8000)=0x539;
 	
-	/*
+	
 	volatile unsigned char *video = 0xB8000;
 	
-	video += 15;
+	//video += 15;
 	
 	//video++;
 	*video = (char) 0x41;
@@ -28,7 +28,10 @@ int main()
 	*video = (char) 'A';
 	video++;
 	*video = (char) 0xf0;
-	*/
+	
+	//p();
+	
+	while( 1 );
 	
 	//gdt_init();
 	
@@ -54,13 +57,14 @@ int main()
 
 void p()
 {
-	asm( "mov $0x0E, %ah" );
+	/*asm( "mov $0x0E, %ah" );
 	asm( "mov $0x43, %al" );
 	asm( "int $0x10" );
 	asm( "mov $0x0E, %ah" );
 	asm( "mov $0x43, %al" );
 	asm( "int $0x10" );
-	asm( "12: jmp 12" );
+	asm( "12: jmp 12" );*/
+	while ( 1 );
 }
 
 /*

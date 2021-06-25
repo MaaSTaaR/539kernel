@@ -37,7 +37,7 @@ start:
 	;                           DS, ES, FS, and GS: for 4 data segments.
 	;                           SS: for stack segment.
 	; They are 16-bit registers that hold "segment selectors"
-	mov ax, 1000h
+	mov ax, 0900h
 	mov es, ax
 	
 	mov ah, 02h     ; Requesting the service of reading disk sectors
@@ -58,13 +58,13 @@ start:
 	; If any error happens in loading our kernel. The bootloader is going to jump to the label "kernel_load_error".
 	jc kernel_load_error
 	
-	; If the loading has been performed correctly. Jump to the kernel's code which resides on 1000h:0000 according
+	; If the loading has been performed correctly. Jump to the kernel's code which resides on 0900h:0000 according
 	; to ES:BX values before calling (int 13h).
 	;
 	; There is a difference between "JMP" and "CALL" inctructions. The first one doesn't store returning information
 	; in the stack while the later does. Because we are not going to return from kernel to the bootloader, we don't
 	; need to store return information.
-	jmp 1000h:0000
+	jmp 0900h:0000
 
 ; ... ;
 ; ... ;

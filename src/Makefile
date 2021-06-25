@@ -54,12 +54,12 @@ kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(INIT_KERNEL_FILES) -o starter.o
 	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
 	objcopy -O binary kernel.elf kernel.o
-	ld -Ttext 0x1000 -b binary --oformat=binary starter.o kernel.o -o 539kernel
+	ld -Ttext 0x1000 -b binary --oformat=binary starter.o kernel.o -o 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel of=kernel.img bs=512
+	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512
 	dd seek=2 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
-	bochs -f bochs
-	#qemu-system-x86_64 -s kernel.img
+	#bochs -f bochs
+	qemu-system-x86_64 -s kernel.img
 	
 fromgas: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
@@ -94,4 +94,4 @@ clean:
 	rm -f *.o
 	rm -f *.elf
 	rm -f *.img
-	rm -f 539kernel
+	rm -f *.bin
