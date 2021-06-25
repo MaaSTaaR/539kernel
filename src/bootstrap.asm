@@ -56,6 +56,7 @@ start:
 	mov bx, 0h      ; ES:BX = Pointer to the buffer that the content of the sector will be loaded in.
 	int 13h         ; BIOS Disk Services
 	
+	
 	; The instruction "jc" jumps to a memory location when CF = 1 (jc = jump if carry).
 	; CF (or carry flag) is the first bit of EFLAG register in x86. The BIOS service (13h,02h)
 	; clear CF (that is, put 0 in CF) when everything is fine. But if there is some error
@@ -86,7 +87,7 @@ kernel_load_error:
 
 ; ... ;
 ; ... ;
-
+	
 print_string:
 	mov ah, 0Eh
 
@@ -105,12 +106,21 @@ print_char:
 	je printing_finished
 	
 	int 10h
-	
+
 	jmp print_char
 
 printing_finished:
     mov al, 10d ; Print new line
     int 10h
+    
+    ; [MQH] 25 June 2021. Move the cursor to the beginning
+    mov ah, 03h
+	mov bh, 0
+	int 10h
+	
+	mov ah, 02h
+	mov dl, 0
+	int 10h
     
     ; print_string is a procedure (or function), therefore we should return. It is called by using "CALL" instead of "JMP".
 	ret
