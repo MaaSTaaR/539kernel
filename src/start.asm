@@ -1,11 +1,14 @@
+bits 16
+extern kernel_main
 start:
+	;jmp $
 	mov ax, cs
 	mov ds, ax
 	
 	; --- ;
 	
-	mov si, init_message
-	call print_string
+	;mov si, init_message
+	;call print_string
 	
 	; --- ;
 	
@@ -14,9 +17,10 @@ start:
 	
 	cli
 	;mov eax, ds
-	mov eax, gdtr
-	mov ebx, [gdtr]
-	lgdt [gdtr] ; 0x00010017
+	;mov eax, gdtr
+	;mov ebx, [gdtr]
+	;jmp $
+	lgdt [gdtr-start] ; 0x00010017
 	
 	;jmp $
 	
@@ -24,6 +28,7 @@ start:
 	;call print_string
 	
 	;; Video
+	xor eax, eax
 	mov ah, 0h
 	mov al, 03h
 	int 10h
@@ -36,11 +41,11 @@ start:
 	
 	mov eax, start_kernel
 ;	add eax, 0x10000
-	call 08h:( 0x09000 + start_kernel )
+	call 08h:( 0x09000 + ( start_kernel - start ) )
 	
-	jmp $
+	;jmp $
 
-%include "bios_print.asm"
+;%include "bios_print.asm"
 
 enter_protected_mode:
 	mov eax, cr0
@@ -70,9 +75,10 @@ db 'BGR'
 
 gdtr:
 	gdt_size			: 	dw ( 5 * 8 ) ;= 28h
-	gdt_base_address	: 	dd 0x09000 + gdt ; TODO: I think shifting is more correct way
+	gdt_base_address	: 	dd 0x09000 + ( gdt - start );0x09000 + gdt ; TODO: I think shifting is more correct way
 
 db 'BeforeStartKernel'
+bits 32
 start_kernel:
 	mov eax, 10h
 	mov ds, eax
@@ -81,6 +87,8 @@ start_kernel:
 	mov es, eax
 	mov fs, eax
 	mov gs, eax
+	jmp $
+	call kernel_main
 	;mov eax, 10h
 	;mov ds, eax
 	;mov ss, eax
@@ -90,3 +98,8 @@ start_kernel:
 	;mov gs, eax
 	;mov long [0xb8000], 0x07690748
 	;nop
+	
+t:
+	nop
+	nop
+	nop

@@ -1,4 +1,12 @@
-int main() 
+void abc();
+void cda();
+int p();
+
+
+
+// 0x000090f0
+
+int kernel_main()
 {
 	/*
 	asm( "mov $0x0, %ah" );
@@ -14,24 +22,33 @@ int main()
 	
 	//*((int*)0xb8000)=0x539;
 	
-	
-	volatile unsigned char *video = 0xB8000;
+//	while ( 1 ) {} 
+	asm( "nop" ); // 0x000090ff
+	//asm( "jmp l" );
 	
 	//video += 15;
-	
-	//video++;
+	//volatile unsigned char *video = 0xB8000;
+	/*video++;
 	*video = (char) 0x41;
 	video++;
-	*video = (char) 0xf0;
+	*video = (char) 0xf1;*/
 	
+//	video++;
+	volatile unsigned char *video = 0xB8000;
+	*video = (char) 'M';
 	video++;
-	*video = (char) 'A';
-	video++;
-	*video = (char) 0xf0;
+	*video = (char) 0xf1;
 	
+	//void *ptrP = &abc;
+	
+	//asm( "l: jmp l" );
+	
+	abc(); // 0x00009139
+	p();
 	//p();
 	
 	while( 1 );
+	//abc();
 	
 	//gdt_init();
 	
@@ -55,7 +72,7 @@ int main()
 	return 0;
 }
 
-void p()
+void abc()
 {
 	/*asm( "mov $0x0E, %ah" );
 	asm( "mov $0x43, %al" );
@@ -64,7 +81,47 @@ void p()
 	asm( "mov $0x43, %al" );
 	asm( "int $0x10" );
 	asm( "12: jmp 12" );*/
-	while ( 1 );
+	//while ( 1 );
+	volatile unsigned char *video = 0xB8000;
+	
+/*	*video = (char) 0x41;
+	video++;
+	*video = (char) 0xf1;
+	*/
+	video++;
+	*video = (char) 'F';
+	video++;
+	*video = (char) 0xf1;
+
+}
+
+void cda()
+{
+	/*asm( "mov $0x0E, %ah" );
+	asm( "mov $0x43, %al" );
+	asm( "int $0x10" );
+	asm( "mov $0x0E, %ah" );
+	asm( "mov $0x43, %al" );
+	asm( "int $0x10" );
+	asm( "12: jmp 12" );*/
+	//while ( 1 );
+	
+/*	*video = (char) 0x41;
+	video++;
+	*video = (char) 0xf1;
+	*/
+	volatile unsigned char *video = 0xB8000;
+	video++;
+	*video = (char) 'T';
+	video++;
+	*video = (char) 0xf1;
+
+}
+
+int p()
+{
+	cda();
+	return 0;
 }
 
 /*

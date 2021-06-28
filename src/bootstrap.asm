@@ -64,6 +64,7 @@ start:
 	; There is a difference between "JMP" and "CALL" inctructions. The first one doesn't store returning information
 	; in the stack while the later does. Because we are not going to return from kernel to the bootloader, we don't
 	; need to store return information.
+	;jmp $
 	jmp 0900h:0000
 
 ; ... ;
