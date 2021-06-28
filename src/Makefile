@@ -58,8 +58,8 @@ kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	dd if=bootstrap.o of=kernel.img
 	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512
 	dd seek=2 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
-	bochs -f bochs
-	#qemu-system-x86_64 -s kernel.img
+	#bochs -f bochs
+	qemu-system-x86_64 -s kernel.img
 	
 fromgas: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
@@ -76,16 +76,16 @@ fromgas: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	
 debug: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
-	$(ASM) -f bin $(INIT_KERNEL_FILES) -o starter.o
+	$(ASM) -f elf32 $(INIT_KERNEL_FILES) -o starter.o 
 	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
-	objcopy -O binary kernel.elf kernel.o
-	ld -Ttext 0x0900 -b binary --oformat=binary starter.o kernel.o -o 539kernel.bin
+	ld -melf_i386 -Tlinker.ld starter.o kernel.elf -o 539kernel.elf
+	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
 	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512
-	#dd seek=1 conv=sync if=kernel.o of=kernel.img bs=512
 	dd seek=2 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
 	bochs -f bochs
 	#qemu-system-x86_64 -s kernel.img
+
 
 asm: $(KERNEL_FILE)
 	$(CC) $(KERNEL_FLAGS) -S $(KERNEL_FILES)

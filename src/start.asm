@@ -87,7 +87,7 @@ start_kernel:
 	mov es, eax
 	mov fs, eax
 	mov gs, eax
-	jmp $
+	;jmp $
 	call kernel_main
 	;mov eax, 10h
 	;mov ds, eax

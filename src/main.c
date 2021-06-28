@@ -1,117 +1,53 @@
-void abc();
+/*void abc();
 void cda();
-int p();
+int p();*/
 
+//volatile unsigned char *video = 0x539;//0xB8000;
 
-
-// 0x000090f0
+volatile unsigned char *video = 0xB8000;
+//int num2 = 5;
 
 int kernel_main()
 {
-	/*
-	asm( "mov $0x0, %ah" );
-	asm( "mov $0x03, %al" );
-	asm( "int $0x10" );
+	//asm( "l: jmp l" );
 	
-	*/
-	//*((int*)0xb8000)=0x07690748;
+	//volatile unsigned int *g = 0x1A68;
 	
-	//*((int*)0xb0000)=0x539;
-	//asm( "movl $0x07690748,0xb8000" );
-	//asm( "1: jmp 1" );
+	//*g = 6;
 	
-	//*((int*)0xb8000)=0x539;
+	//int sum = num1 + num2;
 	
-//	while ( 1 ) {} 
-	asm( "nop" ); // 0x000090ff
-	//asm( "jmp l" );
+	int *p = &video;
+	int p2 = video;
 	
-	//video += 15;
 	//volatile unsigned char *video = 0xB8000;
-	/*video++;
-	*video = (char) 0x41;
-	video++;
-	*video = (char) 0xf1;*/
-	
-//	video++;
-	volatile unsigned char *video = 0xB8000;
 	*video = (char) 'M';
 	video++;
 	*video = (char) 0xf1;
 	
-	//void *ptrP = &abc;
-	
-	//asm( "l: jmp l" );
-	
-	abc(); // 0x00009139
-	p();
-	//p();
+	abc();
 	
 	while( 1 );
-	//abc();
-	
-	//gdt_init();
-	
-	//asm( "1: jmp 1" );
-	
-	
-	/*asm( "mov $0x0E, %ah" );
-	asm( "mov $0x45, %al" );
-	asm( "int $0x10" );*/
-	
-	//p();
-	
-	//asm( "1: jmp 1" );
-	/*asm( "nop" );
-	asm( "mov %cr0, %eax" );
-	asm( "1: jmp 1" );
-	
-	//p();
-	*/
-	
+
 	return 0;
 }
 
+
 void abc()
 {
-	/*asm( "mov $0x0E, %ah" );
-	asm( "mov $0x43, %al" );
-	asm( "int $0x10" );
-	asm( "mov $0x0E, %ah" );
-	asm( "mov $0x43, %al" );
-	asm( "int $0x10" );
-	asm( "12: jmp 12" );*/
-	//while ( 1 );
-	volatile unsigned char *video = 0xB8000;
+	//volatile unsigned char *video = 0xB8000;
 	
-/*	*video = (char) 0x41;
-	video++;
-	*video = (char) 0xf1;
-	*/
 	video++;
 	*video = (char) 'F';
 	video++;
 	*video = (char) 0xf1;
-
 }
-
+/*
 void cda()
 {
-	/*asm( "mov $0x0E, %ah" );
-	asm( "mov $0x43, %al" );
-	asm( "int $0x10" );
-	asm( "mov $0x0E, %ah" );
-	asm( "mov $0x43, %al" );
-	asm( "int $0x10" );
-	asm( "12: jmp 12" );*/
-	//while ( 1 );
-	
-/*	*video = (char) 0x41;
-	video++;
-	*video = (char) 0xf1;
-	*/
 	volatile unsigned char *video = 0xB8000;
-	video++;
+
+//	video++;
 	*video = (char) 'T';
 	video++;
 	*video = (char) 0xf1;
@@ -122,62 +58,5 @@ int p()
 {
 	cda();
 	return 0;
-}
-
-/*
-typedef struct
-{
-	unsigned short limit;
-	unsigned short base_low;
-	unsigned char base_mid;
-	unsigned char access;
-	unsigned char grand;
-	unsigned char base_high;
-} __attribute__((packed)) seg_descr_t;
-
-struct gdt_ptr
-{
-	unsigned short size;
-	unsigned long offset;
-} __attribute__((packed));
-
-#define GDT_ENTRIES 3
-
-seg_descr_t gdt[ GDT_ENTRIES ];
-struct gdt_ptr gdt_p;
-
-void gdt_add( int num, int base, int limit, char access, char grand )
-{
-	gdt[ num ].base_low = base & 0xFFFF;
-	gdt[ num ].base_mid = ( base >> 16 ) & 0xFF;
-	gdt[ num ].base_high = ( base >> 24 ) & 0xFF;
-	
-	gdt[ num ].limit = limit & 0xFFFF;
-	gdt[ num ].grand = ( limit >> 16 ) & 0x0F;
-	
-	gdt[ num ].grand |= grand & 0xF0;
-	
-	gdt[ num ].access |= access;
-}
-
-void gdt_init()
-{
-	gdt_p.size = ( sizeof( seg_descr_t ) * GDT_ENTRIES ) - 1;
-	gdt_p.offset = (int) &gdt;
-	
-	// NULL Segment
-	gdt_add( 0, 0, 0, 0, 0 );
-	
-	// Access flag (a byte) = 0x9A = 10011010
-	// From the left :
-	//		1 = Present bit, That's mean this is a vaild selector
-	//		00 = Ring level ( 0 = Highest for the kernel )
-	//		1 = Descriptor Type, That's mean this descriptor is a Code or Data Segment
-	//		1010 = Segment Type
-	gdt_add( 1, 0, 0xFFFFFFFF, 0x9A, 0xCF );
-	gdt_add( 2, 0, 0xFFFFFFFF, 0x92, 0xCF );
-	
-	// Set the information in GDTR register.
-	//load_gdtr( &gdt_p );
 }
 */
