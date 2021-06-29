@@ -2,7 +2,7 @@ ASM = nasm
 CC = gcc
 BOOTSTRAP_FILE = bootstrap.asm 
 SIMPLE_KERNEL = simple_kernel.asm
-INIT_KERNEL_FILES = start.asm
+INIT_KERNEL_FILES = starter.asm
 KERNEL_FILES = main.c
 
 # -m32 means generate 32-bit code. See "Machine-Dependent Options" section in gcc man page for details. Under "x86 Options" section "-m flag".
@@ -53,7 +53,7 @@ kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
 	$(ASM) -f elf32 $(INIT_KERNEL_FILES) -o starter.o 
 	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
-	ld -melf_i386 -Ttext 0x0900 starter.o kernel.elf -o 539kernel.elf
+	ld -melf_i386 -Tlinker.ld starter.o kernel.elf -o 539kernel.elf
 	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
 	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512

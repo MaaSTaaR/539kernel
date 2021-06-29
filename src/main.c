@@ -1,62 +1,59 @@
-/*void abc();
-void cda();
-int p();*/
-
-//volatile unsigned char *video = 0x539;//0xB8000;
-
+// VGA Text Mode = 0xB8000
+// VGA Graphics Mode = 0xA0000
 volatile unsigned char *video = 0xB8000;
-//int num2 = 5;
 
-int kernel_main()
+int textCurrPos = 0;
+int lastStrSize = 0;
+
+void print( char * );
+void println();
+void printi( int );
+
+void kernel_main()
 {
-	//asm( "l: jmp l" );
+	print( "Welcome to 539kernel!" );
+	println();
+	print( "We are now in Protected-mode" );
+	println();
+	//printi( 0 );
 	
-	//volatile unsigned int *g = 0x1A68;
-	
-	//*g = 6;
-	
-	//int sum = num1 + num2;
-	
-	int *p = &video;
-	int p2 = video;
-	
-	//volatile unsigned char *video = 0xB8000;
-	*video = (char) 'M';
-	video++;
-	*video = (char) 0xf1;
-	
-	abc();
 	
 	while( 1 );
-
-	return 0;
 }
 
-
-void abc()
+void print( char *str )
 {
-	//volatile unsigned char *video = 0xB8000;
+	lastStrSize = 0;
 	
-	video++;
-	*video = (char) 'F';
-	video++;
-	*video = (char) 0xf1;
+	while ( *str != '\0' )
+	{
+		video[ textCurrPos++ ] = *str;
+		video[ textCurrPos++ ] = 15;
+		
+		str++;
+		lastStrSize += 2;
+	}
 }
+
+void println()
+{
+	textCurrPos = ( textCurrPos - lastStrSize ) + 160;
+}
+
 /*
-void cda()
+void printi( int number )
 {
-	volatile unsigned char *video = 0xB8000;
-
-//	video++;
-	*video = (char) 'T';
-	video++;
-	*video = (char) 0xf1;
-
+	asm( "l: jmp l" );
+	
+	char* digitToStr[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+	
+	//print( "0" );
+	if ( number == 0 )
+		print( digitToStr[ number ] );
+		
+	do {
+		
+	} while ( number > 10 );
 }
 
-int p()
-{
-	cda();
-	return 0;
-}
 */
