@@ -15,8 +15,11 @@ void kernel_main()
 	println();
 	print( "We are now in Protected-mode" );
 	println();
-	//printi( 0 );
-	
+	printi( 0 );
+	println();
+	printi( 1 );
+	println();
+	printi( 539 );
 	
 	while( 1 );
 }
@@ -40,20 +43,21 @@ void println()
 	textCurrPos = ( textCurrPos - lastStrSize ) + 160;
 }
 
-/*
 void printi( int number )
 {
-	asm( "l: jmp l" );
-	
 	char* digitToStr[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 	
-	//print( "0" );
-	if ( number == 0 )
+	if ( number >= 0 && number <= 9 )
+	{
 		print( digitToStr[ number ] );
+		return;
+	}
+	else
+	{
+		int remaining = number % 10;
+		number = number / 10;
 		
-	do {
-		
-	} while ( number > 10 );
+		printi( number );
+		printi( remaining );
+	}
 }
-
-*/

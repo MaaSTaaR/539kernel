@@ -26,7 +26,7 @@ start:
 	
 	; === Loading the Kernel === ;
 	
-	call load_kernel_from_disk;
+	call load_kernel_from_disk
 	
 	; If the loading has been performed correctly. Jump to the kernel's code which resides on 0900h:0000 according
 	; to ES:BX values before calling (int 13h).
@@ -34,6 +34,7 @@ start:
 	; There is a difference between "JMP" and "CALL" inctructions. The first one doesn't store returning information
 	; in the stack while the later does. Because we are not going to return from kernel to the bootloader, we don't
 	; need to store return information.
+	;jmp $
 	jmp 0900h:0000
 
 ; ... ;
@@ -51,16 +52,27 @@ load_kernel_from_disk:
 	;                           DS, ES, FS, and GS: for 4 data segments.
 	;                           SS: for stack segment.
 	; They are 16-bit registers that hold "segment selectors"
+	;jmp $
+	nop
+	mov ax, [curr_sector_to_load]
+	sub ax, 2
+	mov bx, 512d
+	mul bx
+	mov bx, ax
+	
 	mov ax, 0900h
+	;shl cx, 1
+	;xor cx, ax
+	;add ax, bx
 	mov es, ax
 	
 	mov ah, 02h     ; Requesting the service of reading disk sectors
-	mov al, 03h     ; Number of sectors to read (How many sectors to read?)
+	mov al, 1h    	; Number of sectors to read (How many sectors to read?)
 	mov ch, 0h      ; Track number
-	mov cl, 02h     ; Sector number
+	mov cl, [curr_sector_to_load]     ; Sector number
 	mov dh, 0h      ; Head number
 	mov dl, 80h     ; Drive to read from. (0 = Floppy. 80h = Drive #0. 81h = Drive #1)
-	mov bx, 0h      ; ES:BX = Pointer to the buffer that the content of the sector will be loaded in.
+	;mov bx, 0h      ; ES:BX = Pointer to the buffer that the content of the sector will be loaded in.
 	int 13h         ; BIOS Disk Services
 	
 	
@@ -71,6 +83,12 @@ load_kernel_from_disk:
 	;
 	; If any error happens in loading our kernel. The bootloader is going to jump to the label "kernel_load_error".
 	jc kernel_load_error
+	
+	sub byte [number_of_sectors_to_load], 1
+	add byte [curr_sector_to_load], 1
+	cmp byte [number_of_sectors_to_load], 0
+	
+	jne load_kernel_from_disk
 	
 	ret
 
@@ -146,6 +164,8 @@ printing_finished:
 title_string        db  'The Bootloader of 539kernel.', 0
 message_string      db  'The kernel is loading...', 0
 load_error_string   db  'The kernel cannot be loaded', 0
+number_of_sectors_to_load db 3d ; 255 sectors = 127.5KB ; [MQH] NEW 4 July 2021
+curr_sector_to_load db 2d
 
 ; [MQH] 9 Dec 2019
 ; "TIMES" is an NASM pseudo-instruction which repeats an instruction a number of specific times.
