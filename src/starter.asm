@@ -17,7 +17,9 @@ start:
 	
 load_gdt:
 	cli
-	lgdt [gdtr-start]
+	lgdt [gdtr - start]
+	
+	ret
 	
 init_video_mode:
 	;; Set Video Mode
@@ -50,7 +52,7 @@ start_kernel:
 	mov es, eax
 	mov fs, eax
 	mov gs, eax
-
+	
 	call kernel_main
 	
 %include "gdt.asm"
