@@ -8,4 +8,5 @@ gdt:
 
 gdtr:
 	gdt_size			: 	dw ( 5 * 8 ) ;= 28h
-	gdt_base_address	: 	dd 0x09000 + ( gdt - start );0x09000 + gdt ; TODO: I think shifting is more correct way
+	gdt_base_address	: 	dd gdt
+

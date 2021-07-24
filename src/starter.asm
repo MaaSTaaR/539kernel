@@ -6,14 +6,14 @@ start:
 	mov ds, ax
 		
 	; --- ;
-		
+	
 	call load_gdt
 	call init_video_mode
 	call enter_protected_mode
 	
 	; --- ;
 	
-	call 08h:( 0x09000 + ( start_kernel - start ) )
+	call 08h:start_kernel
 	
 load_gdt:
 	cli
