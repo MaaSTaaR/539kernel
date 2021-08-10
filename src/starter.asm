@@ -38,7 +38,7 @@ init_video_mode:
 
 enter_protected_mode:
 	mov eax, cr0
-	or al, 1
+	or eax, 1
 	mov cr0, eax
 	
 	ret
