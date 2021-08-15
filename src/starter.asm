@@ -29,7 +29,7 @@ init_video_mode:
 	
 	;; Disable Text Cursor
 	mov ah, 01h
-	mov ch, 3fh
+	mov cx, 2000h
 	int 10h
 	
 	ret
