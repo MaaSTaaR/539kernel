@@ -23,13 +23,11 @@ load_gdt:
 	
 init_video_mode:
 	;; Set Video Mode
-	xor eax, eax
 	mov ah, 0h
 	mov al, 03h ; 03h For Text Mode. 13h For Graphics Mode.
 	int 10h
 	
 	;; Disable Text Cursor
-	xor eax, eax
 	mov ah, 01h
 	mov ch, 3fh
 	int 10h
