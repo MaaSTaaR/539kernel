@@ -46,6 +46,7 @@ start_kernel:
 	mov eax, 10h
 	mov ds, eax
 	mov ss, eax
+	
 	mov eax, 0h
 	mov es, eax
 	mov fs, eax

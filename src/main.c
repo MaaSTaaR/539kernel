@@ -15,10 +15,6 @@ void kernel_main()
 	println();
 	print( "We are now in Protected-mode" );
 	println();
-	printi( 0 );
-	println();
-	printi( 1 );
-	println();
 	printi( 539 );
 	
 	while( 1 );
@@ -26,8 +22,6 @@ void kernel_main()
 
 void print( char *str )
 {
-	lastStrSize = 0;
-	
 	while ( *str != '\0' )
 	{
 		video[ textCurrPos++ ] = *str;
@@ -41,6 +35,8 @@ void print( char *str )
 void println()
 {
 	textCurrPos = ( textCurrPos - lastStrSize ) + 160;
+	
+	lastStrSize = 0;
 }
 
 void printi( int number )
