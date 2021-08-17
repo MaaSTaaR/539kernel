@@ -2,7 +2,7 @@
 // VGA Graphics Mode = 0xA0000
 volatile unsigned char *video = 0xB8000;
 
-int textCurrPos = 0;
+int nextTextPos = 0;
 int currLine = 0;
 
 void print( char * );
@@ -27,13 +27,13 @@ void print( char *str )
 	
 	while ( *str != '\0' )
 	{
-		currCharLocationInVidMem = textCurrPos * 2;
-		currColorLocationInVidMem = ( textCurrPos * 2 ) + 1;
+		currCharLocationInVidMem = nextTextPos * 2;
+		currColorLocationInVidMem = ( nextTextPos * 2 ) + 1;
 		
 		video[ currCharLocationInVidMem ] = *str;
 		video[ currColorLocationInVidMem ] = 15;
 		
-		textCurrPos++;
+		nextTextPos++;
 		
 		str++;
 	}
@@ -41,7 +41,7 @@ void print( char *str )
 
 void println()
 {
-	textCurrPos = ++currLine * 80;
+	nextTextPos = ++currLine * 80;
 }
 
 void printi( int number )
