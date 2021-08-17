@@ -23,10 +23,17 @@ void kernel_main()
 
 void print( char *str )
 {
+	int currCharLocationInVidMem, currColorLocationInVidMem;
+	
 	while ( *str != '\0' )
 	{
-		video[ textCurrPos++ ] = *str;
-		video[ textCurrPos++ ] = 15;
+		currCharLocationInVidMem = textCurrPos * 2;
+		currColorLocationInVidMem = ( textCurrPos * 2 ) + 1;
+		
+		video[ currCharLocationInVidMem ] = *str;
+		video[ currColorLocationInVidMem ] = 15;
+		
+		textCurrPos++;
 		
 		str++;
 	}
@@ -34,7 +41,7 @@ void print( char *str )
 
 void println()
 {
-	textCurrPos = ++currLine * ( 80 * 2 );
+	textCurrPos = ++currLine * 80;
 }
 
 void printi( int number )
