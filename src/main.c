@@ -28,7 +28,7 @@ void print( char *str )
 	while ( *str != '\0' )
 	{
 		currCharLocationInVidMem = nextTextPos * 2;
-		currColorLocationInVidMem = ( nextTextPos * 2 ) + 1;
+		currColorLocationInVidMem = currCharLocationInVidMem + 1;
 		
 		video[ currCharLocationInVidMem ] = *str;
 		video[ currColorLocationInVidMem ] = 15;
