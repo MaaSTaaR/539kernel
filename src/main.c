@@ -3,7 +3,7 @@
 volatile unsigned char *video = 0xB8000;
 
 int textCurrPos = 0;
-int lastStrSize = 0;
+int currLine = 0;
 
 void print( char * );
 void println();
@@ -16,6 +16,7 @@ void kernel_main()
 	print( "We are now in Protected-mode" );
 	println();
 	printi( 539 );
+	println();
 	
 	while( 1 );
 }
@@ -28,15 +29,12 @@ void print( char *str )
 		video[ textCurrPos++ ] = 15;
 		
 		str++;
-		lastStrSize += 2;
 	}
 }
 
 void println()
 {
-	textCurrPos = ( textCurrPos - lastStrSize ) + 160;
-	
-	lastStrSize = 0;
+	textCurrPos = ++currLine * ( 80 * 2 );
 }
 
 void printi( int number )
