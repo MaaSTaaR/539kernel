@@ -8,6 +8,7 @@ start:
 	; --- ;
 	
 	call load_gdt
+	call load_idt
 	call init_video_mode
 	call enter_protected_mode
 	
@@ -19,6 +20,9 @@ load_gdt:
 	cli
 	lgdt [gdtr - start]
 	
+	ret
+	
+load_idt:
 	ret
 	
 init_video_mode:
