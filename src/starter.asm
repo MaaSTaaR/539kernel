@@ -8,7 +8,7 @@ start:
 	; --- ;
 	
 	call load_gdt
-	call load_idt
+	call setup_interrupts
 	call init_video_mode
 	call enter_protected_mode
 	
@@ -22,7 +22,7 @@ load_gdt:
 	
 	ret
 	
-load_idt:
+setup_interrupts:
 	ret
 	
 init_video_mode:
