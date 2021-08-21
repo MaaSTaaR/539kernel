@@ -23,6 +23,9 @@ load_gdt:
 	ret
 	
 setup_interrupts:
+	call remap_pic
+	call load_idt
+	
 	ret
 	
 init_video_mode:
@@ -43,6 +46,12 @@ enter_protected_mode:
 	or eax, 1
 	mov cr0, eax
 	
+	ret
+	
+remap_pic:
+	ret
+
+load_idt:
 	ret
 	
 bits 32
