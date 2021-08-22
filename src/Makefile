@@ -56,8 +56,8 @@ kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	ld -melf_i386 -Tlinker.ld starter.o kernel.elf -o 539kernel.elf
 	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=2
-	dd seek=3 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
+	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=10
+	dd seek=11 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
 	#bochs -f bochs
 	qemu-system-x86_64 -s kernel.img
 	

@@ -1,5 +1,6 @@
 bits 16
 extern kernel_main
+extern interrupt_handler
 
 start:
 	mov ax, cs
@@ -8,9 +9,9 @@ start:
 	; --- ;
 	
 	call load_gdt
-	call setup_interrupts
 	call init_video_mode
 	call enter_protected_mode
+	call setup_interrupts
 	
 	; --- ;
 	
@@ -49,9 +50,32 @@ enter_protected_mode:
 	ret
 	
 remap_pic:
+	mov al, 11h
+	out 0x20, al
+	out 0xa0, al
+	
+	mov al, 20h
+	out 0x21, al
+	mov al, 28h
+	out 0xa1, al 
+	
+	mov al, 04h
+	out 0x21, al
+	mov al, 02h
+	out 0xa1, al
+	
+	mov al, 01h
+	out 0x21, al
+	out 0xa1, al
+	
+	mov al, 0h
+	out 0x21, al
+	out 0xa1, al
+	 
 	ret
 
 load_idt:
+	lidt [idtr - start]
 	ret
 	
 bits 32
@@ -65,6 +89,11 @@ start_kernel:
 	mov fs, eax
 	mov gs, eax
 	
+	;jmp $
+	
+	sti
+	
 	call kernel_main
 	
 %include "gdt.asm"
+%include "idt.asm"

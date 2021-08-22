@@ -41,6 +41,17 @@ start:
 ; ... ;
 
 load_kernel_from_disk:
+	;mov ah, 08h
+	;mov dl, 80h
+	;int 13h
+	;mov bl, 0
+	;mov bl, ch
+	;jmp $
+	;mov dx, 0
+	;mov dl, ch
+	
+	
+	
 	; [MQH] 26 Nov 2019
 	; BIOS provides disk services through intrrupt 13h. The value of the register "ah" decides which disk service that we are requesting from BIOS.
 	
@@ -158,7 +169,7 @@ printing_finished:
 title_string        		db  'The Bootloader of 539kernel.', 0
 message_string      		db  'The kernel is loading...', 0
 load_error_string   		db  'The kernel cannot be loaded', 0
-number_of_sectors_to_load 	db 	3d ; 255 sectors = 127.5KB ; [MQH] NEW 4 July 2021
+number_of_sectors_to_load 	db 	62d ; 255 sectors = 127.5KB ; [MQH] NEW 4 July 2021
 curr_sector_to_load 		db 	2d
 
 ; [MQH] 9 Dec 2019
