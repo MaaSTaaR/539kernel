@@ -169,7 +169,7 @@ printing_finished:
 title_string        		db  'The Bootloader of 539kernel.', 0
 message_string      		db  'The kernel is loading...', 0
 load_error_string   		db  'The kernel cannot be loaded', 0
-number_of_sectors_to_load 	db 	62d ; 255 sectors = 127.5KB ; [MQH] NEW 4 July 2021
+number_of_sectors_to_load 	db 	4d ; 255 sectors = 127.5KB ; [MQH] NEW 4 July 2021
 curr_sector_to_load 		db 	2d
 
 ; [MQH] 9 Dec 2019

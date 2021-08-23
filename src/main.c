@@ -65,9 +65,11 @@ void printi( int number )
 	}
 }
 
-void interrupt_handler( int interrupt_number )
+void interrupt_handler( int interrupt_number ) //, int error_code )
 {
 	println();
 	print( "Interrupt Received " );
 	printi( interrupt_number );
+	//println();
+	//printi( error_code );
 }

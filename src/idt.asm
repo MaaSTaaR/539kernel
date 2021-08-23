@@ -138,12 +138,66 @@ isr_34:
 	push 34
 	jmp isr_basic
 	
-;isr_35:
-;	push 35
-;	jmp isr_basic
+isr_35:
+	push 35
+	jmp isr_basic
+	
+isr_36:
+	push 36
+	jmp isr_basic
+	
+isr_37:
+	push 37
+	jmp isr_basic
+
+isr_38:
+	push 38
+	jmp isr_basic
+
+isr_39:
+	push 39
+	jmp isr_basic
+
+isr_40:
+	push 40
+	jmp isr_basic
+
+isr_41:
+	push 41
+	jmp isr_basic
+
+isr_42:
+	push 42
+	jmp isr_basic
+
+isr_43:
+	push 43
+	jmp isr_basic
+
+isr_44:
+	push 44
+	jmp isr_basic
+
+isr_45:
+	push 45
+	jmp isr_basic
+
+isr_46:
+	push 46
+	jmp isr_basic
+
+isr_47:
+	push 47
+	jmp isr_basic
+	
+isr_48:
+	push 48
+	jmp isr_basic
 
 isr_basic:
 	call interrupt_handler
+	;jmp $
+	nop
 	iret
 	
 ; The value of the flags from Basekernel (kernelcode.S) (https://github.com/dthain/basekernel)
@@ -183,19 +237,20 @@ idt:
 	dw isr_32, 8, 0x8e00, 0x0000
 	dw isr_33, 8, 0x8e00, 0x0000
 	dw isr_34, 8, 0x8e00, 0x0000
-	;dw isr_35, 8, 0x8e00, 0x0000
-	;dw isr_36, 8, 0x8e00, 0x0000
-	;dw isr_37, 8, 0x8e00, 0x0000
-	;dw isr_38, 8, 0x8e00, 0x0000
-	;dw isr_39, 8, 0x8e00, 0x0000
-	;dw isr_40, 8, 0x8e00, 0x0000
-	;dw isr_41, 8, 0x8e00, 0x0000
-	;dw isr_42, 8, 0x8e00, 0x0000
-	;dw isr_43, 8, 0x8e00, 0x0000
-	;dw isr_44, 8, 0x8e00, 0x0000
-	;dw isr_45, 8, 0x8e00, 0x0000
-	;dw isr_46, 8, 0x8e00, 0x0000
-	;dw isr_47, 8, 0x8e00, 0x0000
+	dw isr_35, 8, 0x8e00, 0x0000
+	dw isr_36, 8, 0x8e00, 0x0000
+	dw isr_37, 8, 0x8e00, 0x0000
+	dw isr_38, 8, 0x8e00, 0x0000
+	dw isr_39, 8, 0x8e00, 0x0000
+	dw isr_40, 8, 0x8e00, 0x0000
+	dw isr_41, 8, 0x8e00, 0x0000
+	dw isr_42, 8, 0x8e00, 0x0000
+	dw isr_43, 8, 0x8e00, 0x0000
+	dw isr_44, 8, 0x8e00, 0x0000
+	dw isr_45, 8, 0x8e00, 0x0000
+	dw isr_46, 8, 0x8e00, 0x0000
+	dw isr_47, 8, 0x8e00, 0x0000
+	dw isr_48, 8, 0x8e00, 0x0000
 	
 idtr:
 	idt_size_in_bytes	: 	dw idtr - idt; ( 2 * 8 ) ;= 28h
