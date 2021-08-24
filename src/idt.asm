@@ -128,77 +128,95 @@ isr_31:
 	
 isr_32:
 	push 32
-	jmp isr_basic
+	jmp irq_basic
 	
 isr_33:
 	push 33
-	jmp isr_basic
+	jmp irq_basic
 	
 isr_34:
 	push 34
-	jmp isr_basic
+	jmp irq_basic
 	
 isr_35:
 	push 35
-	jmp isr_basic
+	jmp irq_basic
 	
 isr_36:
 	push 36
-	jmp isr_basic
+	jmp irq_basic
 	
 isr_37:
 	push 37
-	jmp isr_basic
+	jmp irq_basic
 
 isr_38:
 	push 38
-	jmp isr_basic
+	jmp irq_basic
 
 isr_39:
 	push 39
-	jmp isr_basic
+	jmp irq_basic
 
 isr_40:
 	push 40
-	jmp isr_basic
+	jmp irq_basic
 
 isr_41:
 	push 41
-	jmp isr_basic
+	jmp irq_basic
 
 isr_42:
 	push 42
-	jmp isr_basic
+	jmp irq_basic
 
 isr_43:
 	push 43
-	jmp isr_basic
+	jmp irq_basic
 
 isr_44:
 	push 44
-	jmp isr_basic
+	jmp irq_basic
 
 isr_45:
 	push 45
-	jmp isr_basic
+	jmp irq_basic
 
 isr_46:
 	push 46
-	jmp isr_basic
+	jmp irq_basic
 
 isr_47:
 	push 47
-	jmp isr_basic
+	jmp irq_basic
 	
 isr_48:
 	push 48
-	jmp isr_basic
+	jmp irq_basic
 
 isr_basic:
 	call interrupt_handler
-	;jmp $
-	nop
+	
+	add esp, 4
 	iret
+	
+irq_basic:
+	call interrupt_handler
+	
+	;jmp $
+	
+	mov eax, 0x20
+	out 0x20, eax
+	
+	cmp byte [esp], 40d ; Interrupt number
+	jnge irq_basic_end
+	
+	mov eax, 0xa0
+	out 0x20, eax
+	
+	irq_basic_end:
+		add esp, 4
+		ret
 	
 ; The value of the flags from Basekernel (kernelcode.S) (https://github.com/dthain/basekernel)
 idt:

@@ -19,6 +19,7 @@ void kernel_main()
 	println();
 	
 	//asm( "mov $0, %ecx ; mov $0, %eax ; div %ecx" );
+	asm( "nop" );
 	
 	while( 1 );
 }
@@ -65,11 +66,9 @@ void printi( int number )
 	}
 }
 
-void interrupt_handler( int interrupt_number ) //, int error_code )
+void interrupt_handler( int interrupt_number )
 {
 	println();
 	print( "Interrupt Received " );
 	printi( interrupt_number );
-	//println();
-	//printi( error_code );
 }
