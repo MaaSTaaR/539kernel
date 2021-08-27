@@ -205,14 +205,14 @@ irq_basic:
 	
 	;jmp $
 	
-	mov eax, 0x20
-	out 0x20, eax
+	mov al, 0x20
+	out 0x20, al
 	
 	cmp byte [esp], 40d ; Interrupt number
 	jnge irq_basic_end
 	
-	mov eax, 0xa0
-	out 0x20, eax
+	mov al, 0xa0
+	out 0x20, al
 	
 	irq_basic_end:
 		add esp, 4
