@@ -197,7 +197,7 @@ isr_48:
 isr_basic:
 	call interrupt_handler
 	
-	add esp, 4
+	pop eax
 	iret
 	
 irq_basic:
@@ -215,8 +215,8 @@ irq_basic:
 	out 0x20, al
 	
 	irq_basic_end:
-		add esp, 4
-		ret
+		pop eax
+		iret
 	
 ; The value of the flags from Basekernel (kernelcode.S) (https://github.com/dthain/basekernel)
 idt:
