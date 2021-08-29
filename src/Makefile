@@ -42,8 +42,8 @@ KERNEL_FILES = main.c
 #			gnu18: "GNU dialect of ISO C17.  This is the default for C code."
 # 			~ GCC man page
 #-std=gnu99 # -c -Wall -no-pie -g -std=gnu99
-KERNEL_FLAGS = -Wall -m32 -c -ffreestanding -fno-asynchronous-unwind-tables -fno-pie
-#  -O1 -fno-pie 
+KERNEL_FLAGS = -Wall -m32 -c -ffreestanding -fno-pie
+#  -O1 -fno-pie -fno-asynchronous-unwind-tables
 KERNEL_OBJECT = -o kernel.elf
 
 build:
