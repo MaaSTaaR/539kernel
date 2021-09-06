@@ -3,7 +3,6 @@ extern kernel_main
 extern interrupt_handler
 
 start:
-	;jmp $
 	mov ax, cs
 	mov ds, ax
 		
@@ -117,8 +116,6 @@ start_kernel:
 	mov es, eax
 	mov fs, eax
 	mov gs, eax
-	
-	;jmp $
 	
 	sti
 	

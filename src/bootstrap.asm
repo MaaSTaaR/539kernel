@@ -34,24 +34,12 @@ start:
 	; There is a difference between "JMP" and "CALL" inctructions. The first one doesn't store returning information
 	; in the stack while the later does. Because we are not going to return from kernel to the bootloader, we don't
 	; need to store return information.
-	;jmp $
 	jmp 0900h:0000
 
 ; ... ;
 ; ... ;
 
-load_kernel_from_disk:
-	;mov ah, 08h
-	;mov dl, 80h
-	;int 13h
-	;mov bl, 0
-	;mov bl, ch
-	;jmp $
-	;mov dx, 0
-	;mov dl, ch
-	
-	
-	
+load_kernel_from_disk:	
 	; [MQH] 26 Nov 2019
 	; BIOS provides disk services through intrrupt 13h. The value of the register "ah" decides which disk service that we are requesting from BIOS.
 	

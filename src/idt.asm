@@ -203,8 +203,6 @@ isr_basic:
 irq_basic:
 	call interrupt_handler
 	
-	;jmp $
-	
 	mov al, 0x20
 	out 0x20, al
 	
@@ -271,5 +269,5 @@ idt:
 	dw isr_48, 8, 0x8e00, 0x0000
 	
 idtr:
-	idt_size_in_bytes	: 	dw idtr - idt; ( 2 * 8 ) ;= 28h
+	idt_size_in_bytes	: 	dw idtr - idt
 	idt_base_address	: 	dd idt

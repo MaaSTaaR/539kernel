@@ -18,7 +18,6 @@ void kernel_main()
 	printi( 539 );
 	println();
 	
-	//asm( "mov $0, %ecx ; mov $0, %eax ; div %ecx" );
 	asm( "nop" );
 	
 	while( 1 );
