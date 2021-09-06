@@ -1,3 +1,5 @@
+#include "process.h"
+
 // VGA Text Mode = 0xB8000
 // VGA Graphics Mode = 0xA0000
 volatile unsigned char *video = 0xB8000;

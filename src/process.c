@@ -1,0 +1,3 @@
+void process_create()
+{
+}
