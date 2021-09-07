@@ -1,12 +1,19 @@
-struct process_context
-{
-	int eax;
-};
+typedef enum process_state { READY, RUNNING } process_state_t;
 
-struct process 
+typedef struct process_context
 {
-	struct process_context context;
-	int pid 
-};
+	int eax, ecx, edx, ebx, esp, ebp, esi, edi, eip;
+} process_context_t;
 
-void process_create();
+typedef struct process
+{
+	int pid;
+	process_context_t context;
+	process_state_t state;
+	int *base_address;
+} process_t;
+
+process_t *processes[ 2 ];
+
+void process_create( int *, process_t * );
+void scheduler();

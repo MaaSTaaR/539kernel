@@ -11,8 +11,13 @@ void print( char * );
 void println();
 void printi( int );
 
+void processA();
+void processB();
+
 void kernel_main()
 {
+	process_t p1, p2;
+	
 	print( "Welcome to 539kernel!" );
 	println();
 	print( "We are now in Protected-mode" );
@@ -20,7 +25,17 @@ void kernel_main()
 	printi( 539 );
 	println();
 	
-	asm( "nop" );
+	// ... //
+	
+	process_create( &processA, &p1 );
+	process_create( &processB, &p2 );
+	
+	print( "Processes Created" );
+	println();
+	printi( processes[ 0 ]->pid );
+	println();
+	printi( processes[ 1 ]->pid );
+	println();
 	
 	while( 1 );
 }
@@ -69,7 +84,26 @@ void printi( int number )
 
 void interrupt_handler( int interrupt_number )
 {
+	if ( interrupt_number == 32 )
+	{
+		scheduler();
+		print( "SCH DONE " );
+		return;
+	}
+	
 	println();
 	print( "Interrupt Received " );
 	printi( interrupt_number );
+}
+
+void processA()
+{
+	while ( 1 )
+		print( "Process A" );
+}
+
+void processB()
+{
+	while ( 1 )
+		print( "Process B" );
 }
