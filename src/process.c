@@ -1,9 +1,10 @@
 #include "process.h"
 
-int processes_count = 0;
-int curr_pid = 0;
-int next_sch_pid = 0;
-int curr_sch_pid = 0;
+void process_init()
+{
+	processes_count = 0;
+	curr_pid = 0;
+}
 
 void process_create( int *base_address, process_t *process )
 {
@@ -27,13 +28,4 @@ void process_create( int *base_address, process_t *process )
 	processes_count++;
 }
 
-void scheduler()
-{
-	process_t curr_process = processes[ curr_sch_pid ];	
-	process_t next_process = processes[ next_sch_pid ];
-	
-	curr_sch_pid = next_sch_pid;
-	
-	next_sch_pid++;
-	next_sch_pid = next_sch_pid % processes_count;
-}
+

@@ -214,6 +214,17 @@ irq_basic:
 	
 	irq_basic_end:
 		pop eax
+		
+		cmp byte [esp], 32d
+		je return_to_scheduler
+		
+		return_to_scheduler:
+			;mov eax, scheduler
+			pop eax
+			push scheduler
+			;jmp $
+			;call scheduler
+		
 		iret
 	
 ; The value of the flags from Basekernel (kernelcode.S) (https://github.com/dthain/basekernel)

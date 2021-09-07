@@ -48,20 +48,37 @@ KERNEL_OBJECT = -o kernel.elf
 
 build:
 	echo Please Choose Type
-	
+
 kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
 	$(ASM) -f elf32 $(INIT_KERNEL_FILES) -o starter.o 
 	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
+	$(CC) $(KERNEL_FLAGS) screen.c -o screen.elf
 	$(CC) $(KERNEL_FLAGS) process.c -o process.elf
-	ld -melf_i386 -Tlinker.ld starter.o kernel.elf process.elf -o 539kernel.elf
+	$(CC) $(KERNEL_FLAGS) scheduler.c -o scheduler.elf
+	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf -o 539kernel.elf
 	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
 	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=5
 	dd seek=6 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
 	#bochs -f bochs
 	qemu-system-x86_64 -s kernel.img
-	
+
+debug: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
+	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
+	$(ASM) -f elf32 $(INIT_KERNEL_FILES) -o starter.o 
+	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
+	$(CC) $(KERNEL_FLAGS) screen.c -o screen.elf
+	$(CC) $(KERNEL_FLAGS) process.c -o process.elf
+	$(CC) $(KERNEL_FLAGS) scheduler.c -o scheduler.elf
+	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf -o 539kernel.elf
+	objcopy -O binary 539kernel.elf 539kernel.bin
+	dd if=bootstrap.o of=kernel.img
+	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=5
+	dd seek=6 conv=sync if=/dev/zero of=kernel.img bs=512 count=2045
+	bochs -f bochs
+	#qemu-system-x86_64 -s kernel.img
+
 fromgas: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
 	$(ASM) -f bin $(INIT_KERNEL_FILES) -o starter.o
@@ -74,19 +91,6 @@ fromgas: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	dd seek=2 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
 	#bochs -f bochs
 	#qemu-system-x86_64 -s kernel.img
-	
-debug: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
-	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
-	$(ASM) -f elf32 $(INIT_KERNEL_FILES) -o starter.o 
-	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
-	ld -melf_i386 -Tlinker.ld starter.o kernel.elf -o 539kernel.elf
-	objcopy -O binary 539kernel.elf 539kernel.bin
-	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=3
-	dd seek=4 conv=sync if=/dev/zero of=kernel.img bs=512 count=2045
-	bochs -f bochs
-	#qemu-system-x86_64 -s kernel.img
-
 
 asm: $(KERNEL_FILE)
 	$(CC) $(KERNEL_FLAGS) -S $(KERNEL_FILES)
