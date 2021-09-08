@@ -2,6 +2,7 @@ bits 16
 extern kernel_main
 extern interrupt_handler
 extern scheduler
+extern timer
 
 start:
 	mov ax, cs

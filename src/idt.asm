@@ -127,6 +127,7 @@ isr_31:
 	jmp isr_basic
 	
 isr_32:
+	;jmp $
 	push 32
 	jmp irq_basic
 	
@@ -195,14 +196,28 @@ isr_48:
 	jmp irq_basic
 
 isr_basic:
+	cli
 	call interrupt_handler
 	
 	pop eax
+	sti
 	iret
 	
 irq_basic:
-	call interrupt_handler
+	cli
+	;jmp $
+	;cmp byte [esp], 32d
+	;je sch
 	
+	pusha
+	call interrupt_handler
+	;jmp after_sch
+	
+	;sch:
+	;	pusha
+	;	call timer
+	
+	;after_sch:
 	mov al, 0x20
 	out 0x20, al
 	
@@ -213,18 +228,21 @@ irq_basic:
 	out 0x20, al
 	
 	irq_basic_end:
-		pop eax
+		popa
+		add esp, 4
 		
 		cmp byte [esp], 32d
 		je return_to_scheduler
 		
 		return_to_scheduler:
 			;mov eax, scheduler
-			pop eax
+			add esp, 4
+			pusha
 			push scheduler
 			;jmp $
 			;call scheduler
 		
+		sti
 		iret
 	
 ; The value of the flags from Basekernel (kernelcode.S) (https://github.com/dthain/basekernel)
