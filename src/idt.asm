@@ -127,7 +127,6 @@ isr_31:
 	jmp isr_basic
 	
 isr_32:
-	;jmp $
 	push 32
 	jmp irq_basic
 	
@@ -205,45 +204,38 @@ isr_basic:
 	
 irq_basic:
 	cli
-	;jmp $
-	;cmp byte [esp], 32d
-	;je sch
 	
-	pusha
+	pusha ; Store the context of current process
+	
 	call interrupt_handler
-	;jmp after_sch
 	
-	;sch:
-	;	pusha
-	;	call timer
+	mov ebx, [esp + 32] ; Interrupt number
 	
-	;after_sch:
 	mov al, 0x20
 	out 0x20, al
 	
-	cmp byte [esp], 40d ; Interrupt number
+	cmp byte ebx, 40d
 	jnge irq_basic_end
 	
 	mov al, 0xa0
 	out 0x20, al
 	
 	irq_basic_end:
-		popa
-		add esp, 4
-		
-		cmp byte [esp], 32d
+		cmp byte ebx, 32d
 		je return_to_scheduler
 		
-		return_to_scheduler:
-			;mov eax, scheduler
-			add esp, 4
-			pusha
-			push scheduler
-			;jmp $
-			;call scheduler
+		popa
+		add esp, 4 ; Remove interrupt number from stack
 		
 		sti
 		iret
+		
+		return_to_scheduler:
+			popa
+			add esp, 8 ; Remove interrupt number & return address from stack
+			push run_next_process
+
+			iret
 	
 ; The value of the flags from Basekernel (kernelcode.S) (https://github.com/dthain/basekernel)
 idt:

@@ -46,15 +46,6 @@ void kernel_main()
 	while( 1 );
 }
 
-void timer( int eax )
-{
-	print( "Timer" );
-	println();
-	printi( eax );
-	//asm( "mov $0x21b, %ebx" );
-	asm( "l0: jmp l0" );
-}
-
 void interrupt_handler( int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax, int interrupt_number )
 {
 	//if ( cnt0 == 2 )
@@ -75,14 +66,20 @@ void interrupt_handler( int edi, int esi, int ebp, int esp, int ebx, int edx, in
 		return;
 	}*/
 	
+	if ( interrupt_number == 32 )
+	{
+		scheduler( edi, esi, ebp, esp, ebx, edx, ecx, eax );
+		return;
+	}
+	
 	println();
 	print( "Interrupt Received " );
 	printi( interrupt_number );
-	println();
+	/*println();
 	println();
 	printi( eax );
 	println();
-	println();
+	println();*/
 }
 
 void processA()
@@ -94,9 +91,10 @@ void processA()
 	asm( "sti" );*/
 	
 	asm( "cli" );
+	println();
 	print( "Process A" );
 	println();	
-	asm( "mov $0x21b, %eax" );
+	asm( "mov $539, %eax" );
 	//asm( "l: jmp l" );
 	asm( "sti" );
 	asm( "l00: jmp l00" );
@@ -114,8 +112,14 @@ void processA()
 
 void processB()
 {
+	asm( "cli" );
+	println();
 	print( "Process B" );
 	println();	
+	asm( "mov $5399, %eax" );
+	//asm( "l: jmp l" );
+	asm( "sti" );
+	asm( "lb00: jmp lb00" );
 	
 	while ( 1 ) {
 /*		print( "B1 " );
