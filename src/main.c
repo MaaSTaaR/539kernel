@@ -46,7 +46,7 @@ void kernel_main()
 	while( 1 );
 }
 
-void interrupt_handler( int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax, int interrupt_number )
+void interrupt_handler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax, int interrupt_number )
 {
 	//if ( cnt0 == 2 )
 	//	asm( "l0: jmp l0" );
@@ -68,7 +68,9 @@ void interrupt_handler( int edi, int esi, int ebp, int esp, int ebx, int edx, in
 	
 	if ( interrupt_number == 32 )
 	{
-		scheduler( edi, esi, ebp, esp, ebx, edx, ecx, eax );
+		//printi( eip );
+		//asm( "ihl: jmp ihl" );
+		scheduler( eip, edi, esi, ebp, esp, ebx, edx, ecx, eax );
 		return;
 	}
 	
@@ -97,6 +99,11 @@ void processA()
 	asm( "mov $539, %eax" );
 	//asm( "l: jmp l" );
 	asm( "sti" );
+	for ( int currIdx = 0; currIdx < 200; currIdx++ ) {
+		print( "A" );
+		printi( currIdx );
+		print( " " );
+	}
 	asm( "l00: jmp l00" );
 	
 	/*

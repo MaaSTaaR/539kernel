@@ -19,7 +19,7 @@ process_t *get_next_process()
 	return next_process;
 }
 
-void scheduler( int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax )
+void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax )
 {	
 	curr_process = processes[ curr_sch_pid ];
 	next_process = get_next_process();
@@ -35,9 +35,16 @@ void scheduler( int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, i
 */
 	cnt++;
 	
+	println();
+	print( "EAX = " );
+	printi( eax );
+	println();
+	
 	// Copy Context
 	if ( curr_process->state == RUNNING )
 	{
+		print( "-----> COPY" );
+		println();
 		curr_process->context.eax = eax;
 		curr_process->context.ecx = ecx;
 		curr_process->context.edx = edx;
@@ -46,6 +53,7 @@ void scheduler( int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, i
 		curr_process->context.ebp = ebp;
 		curr_process->context.esi = esi;
 		curr_process->context.edi = edi;
+		curr_process->context.eip = eip;
 		
 		// TODO: EIP
 	}
@@ -55,7 +63,7 @@ void scheduler( int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, i
 	
 	curr_process = next_process;
 	
-	if ( cnt == 7 )
+	if ( cnt == 3 )
 		asm( "ll: jmp ll" );
 	
 	
@@ -63,6 +71,12 @@ void scheduler( int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, i
 
 void run_next_process()
 {
+println();
+	print( "=> EAX = " );
+	printi( curr_process->context.eip );
+	println();
+	
+	//asm( "schl: jmp schl" );
 	asm( "	sti;			\
 	 		jmp *%0" : : "r" ( curr_process->context.eip ) );
 }

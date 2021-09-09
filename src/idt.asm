@@ -207,9 +207,12 @@ irq_basic:
 	
 	pusha ; Store the context of current process
 	
+	mov eax, [esp + 36] ; EIP before interrupt. Could be the EIP of the current process
+	push eax  
+	
 	call interrupt_handler
 	
-	mov ebx, [esp + 32] ; Interrupt number
+	mov ebx, [esp + 36] ; Interrupt number
 	
 	mov al, 0x20
 	out 0x20, al
@@ -221,18 +224,20 @@ irq_basic:
 	out 0x20, al
 	
 	irq_basic_end:
+		;jmp $
 		cmp byte ebx, 32d
 		je return_to_scheduler
 		
 		popa
-		add esp, 4 ; Remove interrupt number from stack
+		add esp, 8 ; Remove interrupt number from stack & EIP
 		
 		sti
 		iret
 		
 		return_to_scheduler:
+			;jmp $
 			popa
-			add esp, 8 ; Remove interrupt number & return address from stack
+			add esp, 12 ; Remove interrupt number & return address from stack & EIP
 			push run_next_process
 
 			iret
