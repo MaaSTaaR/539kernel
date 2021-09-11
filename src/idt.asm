@@ -126,9 +126,25 @@ isr_31:
 	push 31
 	jmp isr_basic
 	
+; System Timer
 isr_32:
-	push 32
-	jmp irq_basic
+	cli
+	
+	pusha ; Store the context of current process
+	
+	mov eax, [esp + 32] ; EIP before interrupt. Could be the EIP of the current process
+	push eax  
+	
+	call scheduler
+	
+	mov al, 0x20
+	out 0x20, al
+	
+	popa
+	add esp, 8 ; Remove return address from stack & EIP
+	push run_next_process
+
+	iret
 	
 isr_33:
 	push 33
@@ -204,43 +220,21 @@ isr_basic:
 	
 irq_basic:
 	cli
-	
-	pusha ; Store the context of current process
-	
-	mov eax, [esp + 36] ; EIP before interrupt. Could be the EIP of the current process
-	push eax  
-	
 	call interrupt_handler
-	
-	mov ebx, [esp + 36] ; Interrupt number
 	
 	mov al, 0x20
 	out 0x20, al
 	
-	cmp byte ebx, 40d
+	cmp byte [esp], 40d ; Interrupt number
 	jnge irq_basic_end
 	
 	mov al, 0xa0
 	out 0x20, al
 	
 	irq_basic_end:
-		;jmp $
-		cmp byte ebx, 32d
-		je return_to_scheduler
-		
-		popa
-		add esp, 8 ; Remove interrupt number from stack & EIP
-		
+		pop eax
 		sti
 		iret
-		
-		return_to_scheduler:
-			;jmp $
-			popa
-			add esp, 12 ; Remove interrupt number & return address from stack & EIP
-			push run_next_process
-
-			iret
 	
 ; The value of the flags from Basekernel (kernelcode.S) (https://github.com/dthain/basekernel)
 idt:

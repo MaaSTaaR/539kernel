@@ -35,16 +35,18 @@ void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, i
 */
 	cnt++;
 	
+	/*
 	println();
 	print( "EAX = " );
 	printi( eax );
 	println();
+	*/
 	
 	// Copy Context
 	if ( curr_process->state == RUNNING )
 	{
-		print( "-----> COPY" );
-		println();
+		/*print( "-----> COPY" );
+		println();*/
 		curr_process->context.eax = eax;
 		curr_process->context.ecx = ecx;
 		curr_process->context.edx = edx;
@@ -54,8 +56,6 @@ void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, i
 		curr_process->context.esi = esi;
 		curr_process->context.edi = edi;
 		curr_process->context.eip = eip;
-		
-		// TODO: EIP
 	}
 	
 	curr_process->state = READY;
@@ -72,9 +72,9 @@ void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, i
 void run_next_process()
 {
 println();
-	print( "=> EAX = " );
+	/*print( "=> EAX = " );
 	printi( curr_process->context.eip );
-	println();
+	println();*/
 	
 	//asm( "schl: jmp schl" );
 	asm( "	sti;			\
