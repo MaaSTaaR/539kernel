@@ -7,3 +7,4 @@ void screen_init();
 void print( char * );
 void println();
 void printi( int );
+void cls();

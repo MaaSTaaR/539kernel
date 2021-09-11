@@ -88,57 +88,24 @@ void interrupt_handler( /*int eip, int edi, int esi, int ebp, int esp, int ebx, 
 
 void processA()
 {
-	/*asm( "cli" );
-	print( "Process A" );
-	asm( "mov $0x21b, %eax" );
-	//asm( "l: jmp l" );
-	asm( "sti" );*/
-	
-	//asm( "cli" );
-	println();
 	print( "Process A" );
 	println();	
-	//asm( "mov $539, %eax" );
-	//asm( "l: jmp l" );
-	//asm( "sti" );
-	for ( int currIdx = 0; currIdx < 200; currIdx++ ) {
-		print( "A" );
+
+	for ( int currIdx = 0; 1 == 1; currIdx++ ) {
+		print( "    A" );
 		printi( currIdx );
-		print( " " );
+		println();
 	}
-	asm( "l00: jmp l00" );
-	
-	/*
-	while ( 1 ) {		
-		print( "A" );
-		println();
-		print( "A1 " );
-		println();
-		print( "A2 " );
-		println();
-	}*/
 }
 
 void processB()
 {
-	//asm( "cli" );
-	println();
 	print( "Process B" );
 	println();	
-	//asm( "mov $5399, %eax" );
-	//asm( "l: jmp l" );
-	//asm( "sti" );
-		for ( int currIdx = 0; currIdx < 200; currIdx++ ) {
-		print( "B" );
+
+	for ( int currIdx = 0; 1 == 1; currIdx++ ) {
+		print( "    B" );
 		printi( currIdx );
-		print( " " );
-	}
-	asm( "lb00: jmp lb00" );
-	
-	while ( 1 ) {
-/*		print( "B1 " );
 		println();
-		print( "B2 " );
-		println();*/
 	}
 }

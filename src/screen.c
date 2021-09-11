@@ -30,8 +30,11 @@ void print( char *str )
 
 void println()
 {
-	if ( currLine > 21 )
-		currLine = 0;
+	if ( currLine > 23 )
+	{
+		cls();
+		return;
+	}
 		
 	nextTextPos = ++currLine * 80;
 }
@@ -53,5 +56,30 @@ void printi( int number )
 		printi( number );
 		printi( remaining );
 	}
+}
+
+void cls()
+{
+	for ( int currPos = 0; currPos < ( 80 * 60 ); currPos = currPos + 2 )
+	{
+		video[ currPos ] = 0;
+		video[ currPos + 1 ] = 0;
+	}
+	
+/*	int currCharLocationInVidMem, currColorLocationInVidMem;
+	
+	for ( int currClearLine = 0; currClearLine < 25; currClearLine++ )
+	{
+		for ( int currCharPosition = 0; currCharPosition < 80; currCharPosition++ )
+		{
+			currCharLocationInVidMem = currCharPosition * 2;
+			currColorLocationInVidMem = currClearLine + 1;
+			
+			video[ currCharLocationInVidMem ] = 'S';
+			video[ currColorLocationInVidMem ] = 250;
+		}
+	}
+	*/
+	screen_init();
 }
 

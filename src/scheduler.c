@@ -63,15 +63,15 @@ void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, i
 	
 	curr_process = next_process;
 	
-	if ( cnt == 3 )
-		asm( "ll: jmp ll" );
+	//if ( cnt == 3 )
+		//asm( "ll: jmp ll" );
 	
 	
 }
 
 void run_next_process()
 {
-println();
+//println();
 	/*print( "=> EAX = " );
 	printi( curr_process->context.eip );
 	println();*/
