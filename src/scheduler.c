@@ -6,8 +6,6 @@ int curr_sch_pid = 0;
 
 process_t *curr_process, *next_process;
 
-int cnt = 0;
-
 process_t *get_next_process()
 {
 	process_t *next_process = processes[ next_sch_pid ];
@@ -20,33 +18,17 @@ process_t *get_next_process()
 }
 
 void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax )
-{	
+{
+	print( "EAX = " );
+	printi( eax );
+	println();
+
 	curr_process = processes[ curr_sch_pid ];
 	next_process = get_next_process();
-
-/*
-	println();
-	print( "== SCH ==" );
-	println();
-	println();
-	print( "EAX = " );
-	printi( eax );
-	println();
-*/
-	cnt++;
-	
-	/*
-	println();
-	print( "EAX = " );
-	printi( eax );
-	println();
-	*/
-	
+		
 	// Copy Context
 	if ( curr_process->state == RUNNING )
 	{
-		/*print( "-----> COPY" );
-		println();*/
 		curr_process->context.eax = eax;
 		curr_process->context.ecx = ecx;
 		curr_process->context.edx = edx;
@@ -62,21 +44,14 @@ void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, i
 	next_process->state = RUNNING;
 	
 	curr_process = next_process;
-	
-	//if ( cnt == 3 )
-		//asm( "ll: jmp ll" );
-	
-	
 }
 
 void run_next_process()
 {
-//println();
-	/*print( "=> EAX = " );
-	printi( curr_process->context.eip );
-	println();*/
+	// No code should reside here at all. Otherwise,
+	// we will not be sure that the context of the process
+	// to run will be correct.
 	
-	//asm( "schl: jmp schl" );
 	asm( "	sti;			\
 	 		jmp *%0" : : "r" ( curr_process->context.eip ) );
 }

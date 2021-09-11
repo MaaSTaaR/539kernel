@@ -59,8 +59,8 @@ kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf -o 539kernel.elf
 	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=5
-	dd seek=6 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
+	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=8
+	dd seek=9 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
 	#bochs -f bochs
 	qemu-system-x86_64 -s kernel.img
 
@@ -74,8 +74,8 @@ debug: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf -o 539kernel.elf
 	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=5
-	dd seek=6 conv=sync if=/dev/zero of=kernel.img bs=512 count=2045
+	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=8
+	dd seek=9 conv=sync if=/dev/zero of=kernel.img bs=512 count=2045
 	bochs -f bochs
 	#qemu-system-x86_64 -s kernel.img
 

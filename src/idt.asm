@@ -1,128 +1,160 @@
 isr_0:
+	cli
 	push 0
 	jmp isr_basic
 
 isr_1:
+	cli
 	push 1
 	jmp isr_basic
 	
 isr_2:
+	cli
 	push 2
 	jmp isr_basic
 	
 isr_3:
+	cli
 	push 3
 	jmp isr_basic
 	
 isr_4:
+	cli
 	push 4
 	jmp isr_basic
 	
 isr_5:
+	cli
 	push 5
 	jmp isr_basic
 	
 isr_6:
+	cli
 	push 6
 	jmp isr_basic
 	
 isr_7:
+	cli
 	push 7
 	jmp isr_basic
 	
 isr_8:
+	cli
 	push 8
 	jmp isr_basic
 	
 isr_9:
+	cli
 	push 9
 	jmp isr_basic
 	
 isr_10:
+	cli
 	push 10
 	jmp isr_basic
 	
 isr_11:
+	cli
 	push 11
 	jmp isr_basic
 	
 isr_12:
+	cli
 	push 12
 	jmp isr_basic
 	
 isr_13:
+	cli
 	push 13
 	jmp isr_basic
 	
 isr_14:
+	cli
 	push 14
 	jmp isr_basic
 	
 isr_15:
+	cli
 	push 15
 	jmp isr_basic
 	
 isr_16:
+	cli
 	push 16
 	jmp isr_basic
 	
 isr_17:
+	cli
 	push 17
 	jmp isr_basic
 	
 isr_18:
+	cli
 	push 18
 	jmp isr_basic
 	
 isr_19:
+	cli
 	push 19
 	jmp isr_basic
 	
 isr_20:
+	cli
 	push 20
 	jmp isr_basic
 	
 isr_21:
+	cli
 	push 21
 	jmp isr_basic
 
 isr_22:
+	cli
 	push 22
 	jmp isr_basic
 	
 isr_23:
+	cli
 	push 23
 	jmp isr_basic
 	
 isr_24:
+	cli
 	push 24
 	jmp isr_basic
 	
 isr_25:
+	cli
 	push 25
 	jmp isr_basic
 	
 isr_26:
+	cli
 	push 26
 	jmp isr_basic
 	
 isr_27:
+	cli
 	push 27
 	jmp isr_basic
 	
 isr_28:
+	cli
 	push 28
 	jmp isr_basic
 	
 isr_29:
+	cli
 	push 29
 	jmp isr_basic
 	
 isr_30:
+	cli
 	push 30
 	jmp isr_basic
 	
 isr_31:
+	cli
 	push 31
 	jmp isr_basic
 	
@@ -147,71 +179,87 @@ isr_32:
 	iret
 	
 isr_33:
+	cli
 	push 33
 	jmp irq_basic
 	
 isr_34:
+	cli
 	push 34
 	jmp irq_basic
 	
 isr_35:
+	cli
 	push 35
 	jmp irq_basic
 	
 isr_36:
+	cli
 	push 36
 	jmp irq_basic
 	
 isr_37:
+	cli
 	push 37
 	jmp irq_basic
 
 isr_38:
+	cli
 	push 38
 	jmp irq_basic
 
 isr_39:
+	cli
 	push 39
 	jmp irq_basic
 
 isr_40:
+	cli
 	push 40
 	jmp irq_basic
 
 isr_41:
+	cli
 	push 41
 	jmp irq_basic
 
 isr_42:
+	cli
 	push 42
 	jmp irq_basic
 
 isr_43:
+	cli
 	push 43
 	jmp irq_basic
 
 isr_44:
+	cli
 	push 44
 	jmp irq_basic
 
 isr_45:
+	cli
 	push 45
 	jmp irq_basic
 
 isr_46:
+	cli
 	push 46
 	jmp irq_basic
 
 isr_47:
+	cli
 	push 47
 	jmp irq_basic
 	
 isr_48:
+	cli
 	push 48
 	jmp irq_basic
 
 isr_basic:
-	cli
+;	cli
 	call interrupt_handler
 	
 	pop eax
@@ -219,7 +267,7 @@ isr_basic:
 	iret
 	
 irq_basic:
-	cli
+;	cli
 	call interrupt_handler
 	
 	mov al, 0x20

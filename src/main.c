@@ -4,14 +4,11 @@
 
 void processA();
 void processB();
-
-int cnt0 = 1;
+void processC();
 
 void kernel_main()
-{
-	//asm( "cli" );
-	
-	process_t p1, p2;
+{	
+	process_t p1, p2, p3;
 	
 	// ... //
 	
@@ -31,59 +28,20 @@ void kernel_main()
 	
 	process_create( &processA, &p1 );
 	process_create( &processB, &p2 );
+//	process_create( &processC, &p3 );
 	
-	//scheduler();
+//	while( 1 );
 	
-	/*
-	print( "Processes Created" );
-	println();
-	printi( processes[ 0 ]->pid );
-	println();
-	printi( processes[ 1 ]->pid );
-	println();
-	*/
+	asm( "sti" );
 	
 	while( 1 );
 }
 
-void interrupt_handler( /*int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax,*/ int interrupt_number )
+void interrupt_handler( int interrupt_number )
 {
-	//if ( cnt0 == 2 )
-	//	asm( "l0: jmp l0" );
-		
-	/*print( "32 " );
-
-	cnt0++;
-	
-	printi( cnt0 );
-	
-	if ( interrupt_number == 32 )
-		return;		*/
-	
-	/*
-	{
-		scheduler();
-		return;
-	}*/
-	
-	/*
-	if ( interrupt_number == 32 )
-	{
-		//printi( eip );
-		//asm( "ihl: jmp ihl" );
-		scheduler( eip, edi, esi, ebp, esp, ebx, edx, ecx, eax );
-		return;
-	}
-	*/
-	
-	println();
 	print( "Interrupt Received " );
 	printi( interrupt_number );
-	/*println();
 	println();
-	printi( eax );
-	println();
-	println();*/
 }
 
 void processA()
@@ -91,11 +49,8 @@ void processA()
 	print( "Process A" );
 	println();	
 
-	for ( int currIdx = 0; 1 == 1; currIdx++ ) {
-		print( "    A" );
-		printi( currIdx );
-		println();
-	}
+	while ( 1 )
+		asm( "mov $5390, %eax" );
 }
 
 void processB()
@@ -103,9 +58,15 @@ void processB()
 	print( "Process B" );
 	println();	
 
-	for ( int currIdx = 0; 1 == 1; currIdx++ ) {
-		print( "    B" );
-		printi( currIdx );
-		println();
-	}
+	while ( 1 )
+		asm( "mov $5391, %eax" );
+}
+
+void processC()
+{
+	print( "Process C" );
+	println();	
+
+	while ( 1 )
+		asm( "mov $5392, %eax" );
 }
