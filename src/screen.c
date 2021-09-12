@@ -35,7 +35,7 @@ void println()
 		cls();
 		return;
 	}
-		
+	
 	nextTextPos = ++currLine * 80;
 }
 
@@ -66,6 +66,8 @@ void cls()
 		video[ currPos + 1 ] = 0;
 	}
 	
-	screen_init();
+	nextTextPos = 0;
+	currLine = 0;
+	
 }
 

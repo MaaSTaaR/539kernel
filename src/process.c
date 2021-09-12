@@ -26,8 +26,6 @@ void process_create( int *base_address, process_t *process )
 	processes[ process->pid ] = process;
 	
 	processes_count++;
-	
-	println();
 }
 
 
