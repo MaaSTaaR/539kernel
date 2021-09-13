@@ -172,8 +172,7 @@ isr_32:
 	mov al, 0x20
 	out 0x20, al
 	
-	popa
-	add esp, 8 ; Remove return address from stack & EIP
+	add esp, 40d ; Remove return address from stack, EIP and all general purpose registers of previous process.
 	push run_next_process
 
 	iret

@@ -25,7 +25,7 @@ void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, i
 	curr_process = processes[ curr_sch_pid ];
 	next_process = get_next_process();
 		
-	// Copy Context
+	// Copy Current Process Context to The Memory
 	if ( curr_process->state == RUNNING )
 	{
 		curr_process->context.eax = eax;
@@ -40,6 +40,20 @@ void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, i
 	}
 	
 	curr_process->state = READY;
+	
+	// ... //
+	
+	// Copy Next Process Context to The Processor
+	// TODO: In Memory-Management Version. Copy ESP and EBP
+	asm( "	mov %0, %%eax;	\
+			mov %0, %%ecx;	\
+			mov %0, %%edx;	\
+			mov %0, %%ebx;	\
+			mov %0, %%esi;	\
+			mov %0, %%edi;" 
+			: : "r" ( next_process->context.eax ), "r" ( next_process->context.ecx ), "r" ( next_process->context.edx ), "r" ( next_process->context.ebx ),
+				"r" ( next_process->context.esi ), "r" ( next_process->context.edi ) );
+	
 	next_process->state = RUNNING;
 	
 	curr_process = next_process;

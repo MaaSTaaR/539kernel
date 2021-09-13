@@ -134,4 +134,4 @@ start_kernel:
 %include "idt.asm"
 
 tss:
-	dw 0, 0
+	dd 0

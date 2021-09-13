@@ -5,7 +5,6 @@ void screen_init()
 	// VGA Text Mode = 0xB8000
 	// VGA Graphics Mode = 0xA0000
 	video = 0xB8000;
-	
 	nextTextPos = 0;
 	currLine = 0;
 }
