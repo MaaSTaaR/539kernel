@@ -1,10 +1,10 @@
 #include "scheduler.h"
-#include "process.h"
 
-int next_sch_pid = 0;
-int curr_sch_pid = 0;
-
-process_t *curr_process, *next_process;
+void scheduler_init()
+{
+	next_sch_pid = 0;
+	curr_sch_pid = 0;
+}
 
 process_t *get_next_process()
 {
@@ -19,6 +19,8 @@ process_t *get_next_process()
 
 void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax )
 {
+	process_t *next_process;
+	
 	print( " EAX = " );
 	printi( eax );
 

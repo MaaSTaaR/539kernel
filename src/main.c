@@ -1,5 +1,4 @@
 #include "screen.h"
-#include "process.h"
 #include "scheduler.h"
 
 void processA();
@@ -15,6 +14,7 @@ void kernel_main()
 	
 	screen_init();
 	process_init();
+	scheduler_init();
 	
 	// ... //
 	
