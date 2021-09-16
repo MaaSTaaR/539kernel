@@ -57,8 +57,6 @@ void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, i
 				"r" ( next_process->context.esi ), "r" ( next_process->context.edi ) );
 	
 	next_process->state = RUNNING;
-	
-	curr_process = next_process;
 }
 
 void run_next_process()
