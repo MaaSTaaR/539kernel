@@ -2,7 +2,7 @@
 
 int next_sch_pid, curr_sch_pid;
 
-process_t *curr_process;
+process_t *next_process;
 
 void scheduler_init();
 void scheduler( int, int, int, int, int, int, int, int, int );

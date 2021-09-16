@@ -19,7 +19,7 @@ process_t *get_next_process()
 
 void scheduler( int eip, int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax )
 {
-	process_t *next_process;
+	process_t *curr_process;
 	
 	print( " EAX = " );
 	printi( eax );
@@ -68,5 +68,5 @@ void run_next_process()
 	// to run will be correct.
 	
 	asm( "	sti;			\
-	 		jmp *%0" : : "r" ( curr_process->context.eip ) );
+	 		jmp *%0" : : "r" ( next_process->context.eip ) );
 }
