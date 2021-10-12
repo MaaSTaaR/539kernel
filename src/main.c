@@ -1,3 +1,4 @@
+#include "heap.h"
 #include "screen.h"
 #include "scheduler.h"
 
@@ -8,10 +9,7 @@ void processD();
 
 void kernel_main()
 {	
-	process_t p1, p2, p3, p4;
-	
-	// ... //
-	
+	heap_init();
 	screen_init();
 	process_init();
 	scheduler_init();
@@ -27,10 +25,10 @@ void kernel_main()
 	
 	// ... //
 	
-	process_create( &processA, &p1 );
-	process_create( &processB, &p2 );
-	process_create( &processC, &p3 );
-	process_create( &processD, &p4 );
+	process_create( &processA );
+	process_create( &processB );
+	process_create( &processC );
+	process_create( &processD );
 	
 	asm( "sti" );
 	
