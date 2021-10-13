@@ -2,7 +2,7 @@
 
 void heap_init()
 {
-	heap_base = 0xE000;
+	heap_base = 0xD000;
 }
 
 void *kalloc( int bytes )
