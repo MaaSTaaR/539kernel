@@ -3,6 +3,10 @@ extern kernel_main
 extern interrupt_handler
 extern scheduler
 extern run_next_process
+extern page_directory
+
+global load_page_directory
+global enable_paging
 
 start:
 	mov ax, cs
@@ -116,6 +120,22 @@ load_task_register:
 	ret
 	
 bits 32
+load_page_directory:
+	mov eax, [page_directory]
+	shl eax, 12
+	or eax, 24
+	mov cr3, eax
+	
+	ret
+	
+enable_paging:
+	jmp $
+	mov eax, cr0
+	or eax, 80000000h
+	mov cr0, eax
+	
+	ret
+
 start_kernel:
 	mov eax, 10h
 	mov ds, eax

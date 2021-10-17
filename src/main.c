@@ -9,10 +9,10 @@ void processC();
 void processD();
 
 void kernel_main()
-{	
+{	screen_init();
 	heap_init();
 	paging_init();
-	screen_init();
+	
 	process_init();
 	scheduler_init();
 	
@@ -27,12 +27,12 @@ void kernel_main()
 	
 	// ... //
 	
-	/*process_create( &processA );
+	process_create( &processA );
 	process_create( &processB );
 	process_create( &processC );
 	process_create( &processD );
 	
-	asm( "sti" );*/
+	asm( "sti" );
 	
 	while( 1 );
 }
