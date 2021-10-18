@@ -5,9 +5,11 @@ void heap_init()
 	heap_base = 0xD000;
 }
 
-void *kalloc( int bytes )
+int kalloc( int bytes )
 {
-	void *new_object_address = heap_base;
+	// Note: Not necessarily page-aligned
+	
+	unsigned int new_object_address = heap_base;
 	
 	heap_base += bytes;
 	

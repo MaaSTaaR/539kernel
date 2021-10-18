@@ -1,4 +1,4 @@
-void *heap_base;
+unsigned int heap_base;
 
 void heap_init();
-void *kalloc( int );
+int kalloc( int );

@@ -1,7 +1,7 @@
 extern void load_page_directory();
 extern void enable_paging();
 
-int *page_directory;
+unsigned int *page_directory;
 
 void paging_init();
 

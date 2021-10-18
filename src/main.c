@@ -16,6 +16,8 @@ void kernel_main()
 	process_init();
 	scheduler_init();
 	
+	asm( "l: jmp l" );
+	
 	// ... //
 	
 	print( "Welcome to 539kernel!" );

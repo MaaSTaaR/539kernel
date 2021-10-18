@@ -122,8 +122,8 @@ load_task_register:
 bits 32
 load_page_directory:
 	mov eax, [page_directory]
-	shl eax, 12
-	or eax, 24
+	;shl eax, 12
+	;or eax, 24
 	mov cr3, eax
 	
 	ret
