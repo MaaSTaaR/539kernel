@@ -9,14 +9,12 @@ void processC();
 void processD();
 
 void kernel_main()
-{	screen_init();
+{	
 	heap_init();
 	paging_init();
-	
+	screen_init();
 	process_init();
 	scheduler_init();
-	
-	asm( "l: jmp l" );
 	
 	// ... //
 	
@@ -36,6 +34,15 @@ void kernel_main()
 	
 	asm( "sti" );
 	
+	//int *t = 0x13ffffd;
+	
+	//*t = 539;
+	
+/*	int *t2 = kalloc( sizeof( int ) );
+	*t2 = 539;
+	
+	printi( t2 );
+	*/
 	while( 1 );
 }
 

@@ -129,7 +129,7 @@ load_page_directory:
 	ret
 	
 enable_paging:
-	jmp $
+	;jmp $
 	mov eax, cr0
 	or eax, 80000000h
 	mov cr0, eax

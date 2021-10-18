@@ -160,6 +160,7 @@ isr_31:
 	
 ; System Timer
 isr_32:
+	
 	cli
 	
 	pusha ; Store the context of current process

@@ -1,6 +1,6 @@
 #include "paging.h"
 
-#define PDE_NUM 1
+#define PDE_NUM 2
 #define PTE_NUM 1024
 
 void paging_init()
@@ -32,10 +32,10 @@ void paging_init()
 		}
 		
 		// Bochs bug??
-		/*if ( currPDE == 1 ){ //( pagetable == 126 )
+		if ( currPDE == 1 ){ //( pagetable == 126 )
 			pagetable = 0xF000;
-			printi( (unsigned int) pagetable );
-		}*/
+			//printi( (unsigned int) pagetable );
+		}
 		
 		page_directory[ currPDE ] = ( ( (unsigned int) pagetable ) ) | 25; //0xE000 | 25; // ( ( (unsigned int) pagetable ) ) | 25; //create_page_entry( pagetable, 1, 0, 0, 1, 1, 0, 0, 0 );
 		
