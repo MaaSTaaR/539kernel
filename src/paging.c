@@ -1,40 +1,26 @@
 #include "paging.h"
 
-#define PDE_NUM 2
+#define PDE_NUM 3
 #define PTE_NUM 1024
 
 void paging_init()
 {
 	// Initializing Kernel's Page Directory (1 to 1 mapping)
 	
-	unsigned int curr_frame_base = 0;
+	unsigned int curr_page_frame = 0;
 	
-	page_directory = kalloc( 4 * 1024 );//PDE_NUM );
+	// We allocate 4 * 1024 bytes here, whatever the size of
+	// the page directory, to make sure that the page tables
+	// that are coming next are in page aligned-addresses.
+	page_directory = kalloc( 4 * 1024 );
 		
 	for ( int currPDE = 0; currPDE < PDE_NUM; currPDE++ )
 	{
-		//if ( currPDE > 10 )
-			//while ( 1 );
-	
 		unsigned int *pagetable = kalloc( 4 * PTE_NUM );
 		
-		for ( int currPTE = 0; currPTE <= PTE_NUM; currPTE++ )
+		for ( int currPTE = 0; currPTE < PTE_NUM; currPTE++, curr_page_frame++ )
 		{
-			pagetable[ currPTE ] = ( curr_frame_base * 4096 ) | 25; //( ( curr_frame_base * 4096 ) ) | 25; //create_page_entry( curr_frame_base * 4096, 1, 0, 0, 1, 1, 0, 0, 0 );
-			
-			curr_frame_base++;
-			
-			//if ( curr_frame_base > 15 )
-				//curr_frame_base = 0;
-			
-			//printi( curr_frame_base * 4096 );
-			//println();
-		}
-		
-		// Bochs bug??
-		if ( currPDE == 1 ){ //( pagetable == 126 )
-			pagetable = 0xF000;
-			//printi( (unsigned int) pagetable );
+			pagetable[ currPTE ] = ( curr_page_frame * 4096 ) | 25; //( ( curr_frame_base * 4096 ) ) | 25; //create_page_entry( curr_frame_base * 4096, 1, 0, 0, 1, 1, 0, 0, 0 );
 		}
 		
 		page_directory[ currPDE ] = ( ( (unsigned int) pagetable ) ) | 25; //0xE000 | 25; // ( ( (unsigned int) pagetable ) ) | 25; //create_page_entry( pagetable, 1, 0, 0, 1, 1, 0, 0, 0 );
@@ -46,19 +32,6 @@ void paging_init()
 	
 		
 	}
-	
-	// 4MB Page Size
-	/*
-	int curr_frame_base = 0;
-	
-	page_directory = kalloc( 4 * PDE_NUM );
-		
-	for ( int currPDE = 0; currPDE < PDE_NUM; currPDE++, curr_frame_base++ )
-	{
-		page_directory[ currPDE ] = create_page_entry( curr_frame_base * 4096, 1, 0, 0, 1, 1, 0, 1, 0 );
-	}
-	*/
-
 
 	// ... //
 	
