@@ -19,18 +19,9 @@ void paging_init()
 		unsigned int *pagetable = kalloc( 4 * PTE_NUM );
 		
 		for ( int currPTE = 0; currPTE < PTE_NUM; currPTE++, curr_page_frame++ )
-		{
-			pagetable[ currPTE ] = ( curr_page_frame * 4096 ) | 25; //( ( curr_frame_base * 4096 ) ) | 25; //create_page_entry( curr_frame_base * 4096, 1, 0, 0, 1, 1, 0, 0, 0 );
-		}
+			pagetable[ currPTE ] = create_page_entry( curr_page_frame * 4096, 1, 0, 0, 1, 1, 0, 0, 0 );
 		
-		page_directory[ currPDE ] = ( ( (unsigned int) pagetable ) ) | 25; //0xE000 | 25; // ( ( (unsigned int) pagetable ) ) | 25; //create_page_entry( pagetable, 1, 0, 0, 1, 1, 0, 0, 0 );
-		
-		//printi( (unsigned int) pagetable );
-		//println();
-		/*printi( page_directory[ currPDE ] );
-		println();*/
-	
-		
+		page_directory[ currPDE ] = create_page_entry( pagetable, 1, 0, 0, 1, 1, 0, 0, 0 );
 	}
 
 	// ... //
@@ -51,9 +42,8 @@ int create_page_entry( int base_address, char present, char writable, char privi
 	entry |= accessed << 5;
 	entry |= dirty << 6;
 	entry |= page_size << 7;
-	//entry |= base_address << 12;
 	
-	return ( base_address | entry );//entry;
+	return base_address | entry;
 }
 
 
