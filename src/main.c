@@ -1,5 +1,5 @@
-#include "paging.h"
 #include "heap.h"
+#include "paging.h"
 #include "screen.h"
 #include "scheduler.h"
 
@@ -10,9 +10,9 @@ void processD();
 
 void kernel_main()
 {	
-	screen_init();
 	heap_init();
 	paging_init();	
+	screen_init();
 	process_init();
 	scheduler_init();
 	
