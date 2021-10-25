@@ -1,8 +1,5 @@
 #include "paging.h"
 
-#define PDE_NUM 3
-#define PTE_NUM 1024
-
 void paging_init()
 {
 	// Initializing Kernel's Page Directory (1 to 1 mapping)
