@@ -2,6 +2,7 @@
 #include "paging.h"
 #include "screen.h"
 #include "scheduler.h"
+#include "ata.h"
 
 void processA();
 void processB();
@@ -26,6 +27,8 @@ void kernel_main()
 	println();
 	
 	// ... //
+	
+	read_disk();
 	
 	/*process_create( &processA );
 	process_create( &processB );
