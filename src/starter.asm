@@ -11,6 +11,11 @@ global enable_paging
 global dev_write
 global dev_read
 
+global test_ata
+global still_going
+extern ata_buffer
+global ata_finished_read
+
 start:
 	mov ax, cs
 	mov ds, ax
@@ -143,9 +148,15 @@ dev_write:
 	push edx
 	push eax
 	
-	mov dx, [esp + 16]
-	mov eax, [esp + 12]
-	out dx, eax 
+	xor edx, edx
+	xor eax, eax
+	
+	mov dx, [esp + 12]
+	mov al, [esp + 16]
+	
+	;jmp $
+	
+	out dx, al 
 	
 	pop eax
 	pop edx
@@ -158,21 +169,74 @@ dev_read:
 	
 	xor eax, eax
 	
-	mov dx, [esp + 12]
-	jmp $
+	mov dx, [esp + 8]
+;	jmp $
 	in al, dx
 	
 	pop edx
 	
+	;jmp $
+	
 	ret
+
+ata_finished_read:
+	mov     dx,1f7h
+	in      al,dx
+	jz      ata_finished_read
+	
+	ret
+	
+; Source: https://forum.osdev.org/viewtopic.php?t=12268
+test_ata:
+	mov eax, 10h
+	mov es, eax
+	
+   mov     dx,1f6h         ;Drive and head port
+   mov     al,0a0h         ;Drive 0, head 0
+   out     dx,al
+
+   mov     dx,1f2h         ;Sector count port
+   mov     al,1            ;Read one sector
+   out     dx,al
+
+   mov     dx,1f3h         ;Sector number port
+   mov     al,1            ;Read sector one
+   out     dx,al
+
+   mov     dx,1f4h         ;Cylinder low port
+   mov     al,0            ;Cylinder 0
+   out     dx,al
+
+   mov     dx,1f5h         ;Cylinder high port
+   mov     al,0            ;The rest of the cylinder 0
+   out     dx,al
+
+   mov     dx,1f7h         ;Command port
+   mov     al,20h          ;Read with retry.
+   out     dx,al
+still_going:
+   in      al,dx
+   ;jmp $
+   test    al,8            ;This means the sector buffer requires
+            ;servicing.
+   jz      still_going     ;Don't continue until the sector buffer
+            ;is ready.
+
+   mov     cx,512/2        ;One sector /2
+   mov     edi,[ata_buffer]
+   mov     dx,1f0h         ;Data port - data comes in and out of here.
+   jmp $
+   rep     insw
+
+   ret
 
 start_kernel:
 	mov eax, 10h
 	mov ds, eax
 	mov ss, eax
+	mov es, eax
 	
 	mov eax, 0h
-	mov es, eax
 	mov fs, eax
 	mov gs, eax
 	
