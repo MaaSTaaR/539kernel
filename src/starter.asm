@@ -14,7 +14,8 @@ global dev_read
 global test_ata
 global still_going
 extern ata_buffer
-global ata_finished_read
+global ata_copy_to_buffer
+global ata_copy_to_disk
 
 start:
 	mov ax, cs
@@ -170,7 +171,7 @@ dev_read:
 	xor eax, eax
 	
 	mov dx, [esp + 8]
-;	jmp $
+	;jmp $
 	in al, dx
 	
 	pop edx
@@ -179,9 +180,56 @@ dev_read:
 	
 	ret
 
+; ata_copy_to_buffer( int port, int size, void *buffer );
+ata_copy_to_buffer:
+	push ecx
+	push edi
+	push edx
+	
+	xor ecx, ecx
+	xor edi, edi
+	xor edx, edx
+	
+	mov dx, [esp + 16] ; Port
+	mov cx, [esp + 20] ; Size
+	mov edi, [esp + 24] ; Buffer
+	
+	rep insw
+	
+	pop edx
+	pop edi
+	pop ecx
+	
+	ret
+	
+; ata_copy_to_disk( int port, int size, void *buffer );
+ata_copy_to_disk:
+	push ecx
+	push edi
+	push edx
+	
+	xor ecx, ecx
+	xor edi, edi
+	xor edx, edx
+	
+	mov dx, [esp + 16] ; Port
+	mov cx, [esp + 20] ; Size
+	mov edi, [esp + 24] ; Buffer
+	
+	rep outsw
+	
+	pop edx
+	pop edi
+	pop ecx
+	
+	ret
+
+
 ata_finished_read:
 	mov     dx,1f7h
 	in      al,dx
+	;jmp $
+	test    al,8
 	jz      ata_finished_read
 	
 	ret

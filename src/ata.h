@@ -1,2 +1,2 @@
-void read_disk();
-void write_disk();
+void *read_disk( int );
+void write_disk( int, void *buffer );

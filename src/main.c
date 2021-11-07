@@ -28,7 +28,16 @@ void kernel_main()
 	
 	// ... //
 	
-	read_disk();
+	/*void *data = read_disk( 1 );
+	
+	printi( data );*/
+	
+	char *data = "From kernel_main(). Hello!!";
+	
+	write_disk( 2, data );
+	
+	println();
+	print( "=============" );
 	
 	/*process_create( &processA );
 	process_create( &processB );
