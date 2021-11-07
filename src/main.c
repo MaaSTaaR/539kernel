@@ -32,12 +32,12 @@ void kernel_main()
 	
 	printi( data );*/
 	
-	char *data = "From kernel_main(). Hello!!";
+	/*char *data = "From kernel_main(). Hello!!";
 	
 	write_disk( 2, data );
 	
 	println();
-	print( "=============" );
+	print( "=============" );*/
 	
 	/*process_create( &processA );
 	process_create( &processB );
