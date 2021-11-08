@@ -197,21 +197,21 @@ ata_copy_to_buffer:
 ; ata_copy_to_disk( int port, int size, void *buffer );
 ata_copy_to_disk:
 	push ecx
-	push edi
+	push esi
 	push edx
 	
 	xor ecx, ecx
-	xor edi, edi
+	xor esi, esi
 	xor edx, edx
 	
 	mov dx, [esp + 16] ; Port
 	mov cx, [esp + 20] ; Size
-	mov edi, [esp + 24] ; Buffer
+	mov esi, [esp + 24] ; Buffer
 	
 	rep outsw
 	
 	pop edx
-	pop edi
+	pop esi
 	pop ecx
 	
 	ret
