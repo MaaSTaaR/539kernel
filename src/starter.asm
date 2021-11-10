@@ -141,7 +141,7 @@ enable_paging:
 	
 ; --- ;
 
-; dev_out( int port, int cmd );
+; dev_write( int port, int cmd );
 dev_write:
 	push edx
 	push eax
@@ -159,13 +159,15 @@ dev_write:
 	
 	ret
 
-; dev_in( int port );
+; dev_read( int port );
 dev_read:
 	push edx
 	
+	xor edx, edx
 	xor eax, eax
 	
 	mov dx, [esp + 8]
+	
 	in al, dx
 	
 	pop edx

@@ -28,9 +28,9 @@ void kernel_main()
 	
 	// ... //
 	
-	/*void *data = read_disk( 1 );
+	void *data = read_disk( 0 );
 	
-	printi( data );*/
+	printi( data );
 	
 	/*char *data = "From kernel_main(). Hello!!";
 	
