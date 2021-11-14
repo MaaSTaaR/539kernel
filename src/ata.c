@@ -1,8 +1,5 @@
 #include "ata.h"
 
-#define BASE_PORT 0x1F0
-#define SECTOR_SIZE 512
-
 // LBA
 void *read_disk( int address )
 {
