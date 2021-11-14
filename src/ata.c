@@ -53,10 +53,6 @@ void write_disk( int address, void *buffer )
 
 void *read_disk_chs( int sector )
 {
-	short *buffer = kalloc( SECTOR_SIZE );
-	
-	// ... //
-	
 	dev_write( BASE_PORT + 6, 0x0a0 ); // Drive 0 and Head 0
 	dev_write( BASE_PORT + 2, 1 ); // Sector count
 	dev_write( BASE_PORT + 3, sector ); // Sector to read
@@ -72,6 +68,8 @@ void *read_disk_chs( int sector )
 	} while ( ( status ^ 0x80 ) == 128 );
 	
 	// ... //
+	
+	short *buffer = kalloc( SECTOR_SIZE );
 	
 	for ( int currByte = 0; currByte < ( SECTOR_SIZE / 2 ); currByte++ )
 		buffer[ currByte ] = dev_read( BASE_PORT );
