@@ -28,7 +28,7 @@ void kernel_main()
 	
 	// ... //
 	
-	void *data = read_disk( 0 );
+	void *data = read_disk_chs( 1 ); //read_disk( 0 );
 	
 	printi( data );
 	

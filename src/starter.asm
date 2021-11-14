@@ -10,6 +10,7 @@ global enable_paging
 
 global dev_write
 global dev_read
+global dev_read_word
 
 global ata_copy_to_buffer
 global ata_copy_to_disk
@@ -169,6 +170,21 @@ dev_read:
 	mov dx, [esp + 8]
 	
 	in al, dx
+	
+	pop edx
+	
+	ret
+
+; dev_read_word( int port );
+dev_read_word:
+	push edx
+	
+	xor edx, edx
+	xor eax, eax
+	
+	mov dx, [esp + 8]
+	
+	in ax, dx
 	
 	pop edx
 	
