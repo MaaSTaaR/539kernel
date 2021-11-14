@@ -76,8 +76,8 @@ void *read_disk_chs( int sector )
 	
 	// ... //
 	
-	for ( int currByte = 0; currByte < ( 512 / 2 ); currByte++ )
-		buffer[ currByte ] = dev_read_word( BASE_PORT );
+	for ( int currByte = 0; currByte < ( SECTOR_SIZE / 2 ); currByte++ )
+		buffer[ currByte ] = dev_read( BASE_PORT );
 
 	return buffer;
 }
