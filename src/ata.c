@@ -30,7 +30,7 @@ void *read_disk( int address )
 }
 
 // LBA
-void write_disk( int address, void *buffer )
+void write_disk( int address, short *buffer )
 {
 	dev_write( BASE_PORT + 6, ( 0x0e0 | ( ( address & 0x0F000000 ) >> 24 ) ) ); // Drive 0. Bits 0-3 = Bits 24-27 of LBA
 	dev_write( BASE_PORT + 2, 1 ); // Sector count
@@ -48,7 +48,8 @@ void write_disk( int address, void *buffer )
 	
 	// ... //
 	
-	ata_copy_to_disk( BASE_PORT, SECTOR_SIZE / 2, buffer );
+	for ( int currByte = 0; currByte < ( SECTOR_SIZE / 2 ); currByte++ )
+		dev_write_word( BASE_PORT, buffer[ currByte ] );
 }
 
 
@@ -78,7 +79,7 @@ void *read_disk_chs( int sector )
 	return buffer;
 }
 
-void write_disk_chs( int sector, void *buffer )
+void write_disk_chs( int sector, short *buffer )
 {
 	dev_write( BASE_PORT + 6, 0x0a0 ); // Drive 0 and Head 0
 	dev_write( BASE_PORT + 2, 1 ); // Sector count
@@ -96,7 +97,8 @@ void write_disk_chs( int sector, void *buffer )
 	
 	// ... //
 	
-	ata_copy_to_disk( BASE_PORT, SECTOR_SIZE / 2, buffer );
+	for ( int currByte = 0; currByte < ( SECTOR_SIZE / 2 ); currByte++ )
+		dev_write_word( BASE_PORT, buffer[ currByte ] );
 }
 
 

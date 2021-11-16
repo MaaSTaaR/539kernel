@@ -2,7 +2,7 @@
 #define SECTOR_SIZE 512
 
 void *read_disk( int );
-void write_disk( int, void * );
+void write_disk( int, short * );
 
 void *read_disk_chs( int );
-void write_disk_chs( int, void * );
+void write_disk_chs( int, short * );

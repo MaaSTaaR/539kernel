@@ -9,10 +9,8 @@ global load_page_directory
 global enable_paging
 
 global dev_write
+global dev_write_word
 global dev_read
-
-global ata_copy_to_buffer
-global ata_copy_to_disk
 
 start:
 	mov ax, cs
@@ -158,6 +156,23 @@ dev_write:
 	pop edx
 	
 	ret
+	
+dev_write_word:
+	push edx
+	push eax
+	
+	xor edx, edx
+	xor eax, eax
+	
+	mov dx, [esp + 12]
+	mov ax, [esp + 16]
+	
+	out dx, ax 
+	
+	pop eax
+	pop edx
+	
+	ret
 
 ; dev_read( int port );
 dev_read:
@@ -171,50 +186,6 @@ dev_read:
 	in ax, dx
 	
 	pop edx
-	
-	ret
-
-; ata_copy_to_buffer( int port, int size, void *buffer );
-ata_copy_to_buffer:
-	push ecx
-	push edi
-	push edx
-	
-	xor ecx, ecx
-	xor edi, edi
-	xor edx, edx
-	
-	mov dx, [esp + 16] ; Port
-	mov cx, [esp + 20] ; Size
-	mov edi, [esp + 24] ; Buffer
-	
-	rep insw
-	
-	pop edx
-	pop edi
-	pop ecx
-	
-	ret
-	
-; ata_copy_to_disk( int port, int size, void *buffer );
-ata_copy_to_disk:
-	push ecx
-	push esi
-	push edx
-	
-	xor ecx, ecx
-	xor esi, esi
-	xor edx, edx
-	
-	mov dx, [esp + 16] ; Port
-	mov cx, [esp + 20] ; Size
-	mov esi, [esp + 24] ; Buffer
-	
-	rep outsw
-	
-	pop edx
-	pop esi
-	pop ecx
 	
 	ret
 
