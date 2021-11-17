@@ -59,11 +59,12 @@ kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(CC) $(KERNEL_FLAGS) heap.c -o heap.elf
 	$(CC) $(KERNEL_FLAGS) paging.c -o paging.elf
 	$(CC) $(KERNEL_FLAGS) ata.c -o ata.elf
-	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf heap.elf paging.elf ata.elf -o 539kernel.elf
+	$(CC) $(KERNEL_FLAGS) filesystem.c -o filesystem.elf
+	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf heap.elf paging.elf ata.elf filesystem.elf -o 539kernel.elf
 	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=8
-	dd seek=9 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
+	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=10
+	dd seek=11 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
 	#bochs -f bochs
 	qemu-system-x86_64 -s kernel.img
 
@@ -77,37 +78,19 @@ debug: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(CC) $(KERNEL_FLAGS) heap.c -o heap.elf
 	$(CC) $(KERNEL_FLAGS) paging.c -o paging.elf
 	$(CC) $(KERNEL_FLAGS) ata.c -o ata.elf
-	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf heap.elf paging.elf ata.elf -o 539kernel.elf
+	$(CC) $(KERNEL_FLAGS) filesystem.c -o filesystem.elf
+	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf heap.elf paging.elf ata.elf filesystem.elf -o 539kernel.elf
 	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=8
-	dd seek=9 conv=sync if=/dev/zero of=kernel.img bs=512 count=2045
+	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=9
+	dd seek=10 conv=sync if=/dev/zero of=kernel.img bs=512 count=2045
 	bochs -f bochs
-	#qemu-system-x86_64 -s kernel.img
+	
+rerun-debug:
+	bochs -f bochs
 
-fromgas: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
-	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
-	$(ASM) -f bin $(INIT_KERNEL_FILES) -o starter.o
-	#$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
-	as --32 main.s -o kernel.elf
-	objcopy -O binary kernel.elf kernel.o
-	ld -Ttext 0x0900 -b binary --oformat=binary starter.o kernel.o -o 539kernel.bin
-	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512
-	dd seek=2 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
-	#bochs -f bochs
-	#qemu-system-x86_64 -s kernel.img
-
-asm: $(KERNEL_FILE)
-	$(CC) $(KERNEL_FLAGS) -S $(KERNEL_FILES)
-
-simplekernel: $(BOOTSTRAP_FILE) $(SIMPLE_KERNEL)
-	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
-	$(ASM) -f bin $(SIMPLE_KERNEL) -o kernel.o
-	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=kernel.o of=kernel.img bs=512
+rerun-kernel:
 	qemu-system-x86_64 -s kernel.img
-
 
 clean:
 	rm -f *.o

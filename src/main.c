@@ -3,6 +3,7 @@
 #include "screen.h"
 #include "scheduler.h"
 #include "ata.h"
+#include "filesystem.h"
 
 void processA();
 void processB();
@@ -16,6 +17,7 @@ void kernel_main()
 	screen_init();
 	process_init();
 	scheduler_init();
+	filesystem_init();
 	
 	// ... //
 	
@@ -28,20 +30,32 @@ void kernel_main()
 	
 	// ... //
 	
+	char data[ 512 ] = "The content of the first file on 539filesystem";
+	
+	create_file( "first_file", data );
+	
 	/*void *data = //read_disk_chs( 1 ); 
-				read_disk( 0 );
+				read_disk( 100 );
 	
 	printi( data );*/
 	
-	char *data = "[NEW] From kernel_main(). Hello!!";
 	
-//	write_disk( 0, data );
+	/*char *data = "AAAAAAAABBBBBBBB";
 	
-	write_disk_chs( 1, data );
+	write_disk( 100, data );*/
 	
+	// ... //
+	
+	/*int *data2 = ( int * ) read_disk( 1 );
+	
+	printi( data2 );*/
+	
+	
+//	write_disk_chs( 1, data );
+	/*
 	println();
 	print( "=============" );
-	
+	*/
 	/*process_create( &processA );
 	process_create( &processB );
 	process_create( &processC );
