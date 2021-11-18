@@ -185,6 +185,8 @@ dev_read:
 	
 	in ax, dx
 	
+	;jmp $
+	
 	pop edx
 	
 	ret

@@ -10,10 +10,12 @@ typedef struct
 {
 	char filename[ FILENAME_LENGTH ];
 	int next_file_address;
-	char padding[ 252 ];
 } metadata_t;
 
 base_block_t *base_block;
 
 void filesystem_init();
+int get_files_number();
 void create_file( char *, char * );
+char **list_files();
+char *read_file( char * );

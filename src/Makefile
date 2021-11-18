@@ -59,12 +59,13 @@ kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(CC) $(KERNEL_FLAGS) heap.c -o heap.elf
 	$(CC) $(KERNEL_FLAGS) paging.c -o paging.elf
 	$(CC) $(KERNEL_FLAGS) ata.c -o ata.elf
+	$(CC) $(KERNEL_FLAGS) str.c -o str.elf
 	$(CC) $(KERNEL_FLAGS) filesystem.c -o filesystem.elf
-	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf heap.elf paging.elf ata.elf filesystem.elf -o 539kernel.elf
+	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf heap.elf paging.elf ata.elf str.elf filesystem.elf -o 539kernel.elf
 	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=10
-	dd seek=11 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
+	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=20
+	dd seek=21 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
 	#bochs -f bochs
 	qemu-system-x86_64 -s kernel.img
 
@@ -78,12 +79,13 @@ debug: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(CC) $(KERNEL_FLAGS) heap.c -o heap.elf
 	$(CC) $(KERNEL_FLAGS) paging.c -o paging.elf
 	$(CC) $(KERNEL_FLAGS) ata.c -o ata.elf
+	$(CC) $(KERNEL_FLAGS) str.c -o str.elf
 	$(CC) $(KERNEL_FLAGS) filesystem.c -o filesystem.elf
-	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf heap.elf paging.elf ata.elf filesystem.elf -o 539kernel.elf
+	ld -melf_i386 -Tlinker.ld starter.o kernel.elf screen.elf process.elf scheduler.elf heap.elf paging.elf ata.elf str.elf filesystem.elf -o 539kernel.elf
 	objcopy -O binary 539kernel.elf 539kernel.bin
 	dd if=bootstrap.o of=kernel.img
-	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=9
-	dd seek=10 conv=sync if=/dev/zero of=kernel.img bs=512 count=2045
+	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=20
+	dd seek=21 conv=sync if=/dev/zero of=kernel.img bs=512 count=2045
 	bochs -f bochs
 	
 rerun-debug:
