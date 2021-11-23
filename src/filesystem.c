@@ -3,15 +3,6 @@
 void filesystem_init()
 {
 	base_block = read_disk( BASE_BLOCK_ADDRESS );
-	/*
-	println();
-	print( "BASE BLOCK = " );
-	printi( base_block );
-	println();
-	printi( base_block->head );
-	println();
-	printi( base_block->tail );
-	println();*/
 }
 
 void update_base_block( int new_head, int new_tail )
@@ -19,31 +10,7 @@ void update_base_block( int new_head, int new_tail )
 	base_block->head = new_head;
 	base_block->tail = new_tail;
 	
-	/*
-	println();
-	print( "BASE BLOCK [FROM-MEM] = " );
-	printi( base_block );
-	println();
-	printi( base_block->head );
-	println();
-	printi( base_block->tail );
-	println();
-	*/
 	write_disk( BASE_BLOCK_ADDRESS, base_block );
-	
-	/*
-	base_block = read_disk( BASE_BLOCK_ADDRESS );
-	
-	println();
-	print( "BASE BLOCK [FROM-DISK] = " );
-	printi( base_block );
-	println();
-	printi( base_block->head );
-	println();
-	printi( base_block->tail );
-	println();
-	*/
-	//while ( 1 );
 }
 
 metadata_t *load_metadata( int address )
@@ -109,7 +76,7 @@ void create_file( char *filename, char *buffer )
 		update_base_block( metadata_lba, metadata_lba );
 	}
 	else
-	{	
+	{
 		metadata_t *tail_metadata = load_metadata( base_block->tail );
 		
 		tail_metadata->next_file_address = metadata_lba;
@@ -191,15 +158,7 @@ int get_prev_file_address( int address )
 	while ( 1 )
 	{
 		if ( prev_file->next_file_address == address )
-		{
-		/*
-			print( prev_file->filename );
-			println();
-			printi( prev_file->next_file_address );
-			
-			while ( 1 );*/
 			return prev_file_address;
-		}
 		
 		prev_file_address = prev_file->next_file_address;
 		prev_file = load_metadata( prev_file->next_file_address );
@@ -210,16 +169,20 @@ int get_prev_file_address( int address )
 
 void delete_file( char *filename )
 {
-	if ( get_files_number() == 1 )
-		update_base_block( 0, 0 );
-	
-	// ... //
-	
 	int curr_file_address = get_address_by_filename( filename );
 	
 	if ( curr_file_address == 0 )
 		return;
+		
+	// ... //
 	
+	if ( get_files_number() == 1 )
+	{
+		update_base_block( 0, 0 );
+		
+		return;
+	}
+			
 	metadata_t *curr_file_metadata = read_disk( curr_file_address );
 	
 	if ( curr_file_address == base_block->head )
@@ -229,10 +192,6 @@ void delete_file( char *filename )
 	else
 	{
 		int prev_file_address = get_prev_file_address( curr_file_address );
-		
-		println();
-		printi( prev_file_address );
-		println();
 		
 		metadata_t *prev_file = load_metadata( prev_file_address );
 
