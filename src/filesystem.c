@@ -15,9 +15,7 @@ void update_base_block( int new_head, int new_tail )
 
 metadata_t *load_metadata( int address )
 {
-	metadata_t *metadata = kalloc( sizeof( metadata_t ) );
-		
-	metadata = read_disk( address );
+	metadata_t *metadata = read_disk( address );
 	
 	return metadata;
 }

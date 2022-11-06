@@ -42,7 +42,7 @@ KERNEL_FILES = main.c
 #			gnu18: "GNU dialect of ISO C17.  This is the default for C code."
 # 			~ GCC man page
 #-std=gnu99 # -c -Wall -no-pie -g -std=gnu99
-KERNEL_FLAGS = -Wall -m32 -c -ffreestanding -fno-asynchronous-unwind-tables -fno-pie
+KERNEL_FLAGS = -Wall -m32 -c -ffreestanding -fno-asynchronous-unwind-tables -fno-pie -fcommon -fno-stack-protector
 #  -O1 -fno-pie 
 KERNEL_OBJECT = -o kernel.elf
 
@@ -66,8 +66,8 @@ kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	dd if=bootstrap.o of=kernel.img
 	dd seek=1 conv=sync if=539kernel.bin of=kernel.img bs=512 count=20
 	dd seek=21 conv=sync if=/dev/zero of=kernel.img bs=512 count=2046
-	#bochs -f bochs
-	qemu-system-x86_64 -s kernel.img
+	bochs -f bochs
+	#qemu-system-x86_64 -s kernel.img
 
 debug: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
