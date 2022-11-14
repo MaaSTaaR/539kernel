@@ -3,28 +3,16 @@ extern kernel_main
 extern interrupt_handler
 extern scheduler
 extern run_next_process
-extern page_directory
-
-global load_page_directory
-global enable_paging
-
-global dev_write
-global dev_write_word
-global dev_read
 
 start:
 	mov ax, cs
 	mov ds, ax
 		
-	; --- ;
-	
 	call load_gdt
 	call init_video_mode
 	call enter_protected_mode
-	call setup_interrupts
-	call load_task_register
-	
-	; --- ;
+    call setup_interrupts
+    call load_task_register
 	
 	call 08h:start_kernel
 	
@@ -34,29 +22,27 @@ load_gdt:
 	
 	ret
 	
-setup_interrupts:
-	call remap_pic
-	call load_idt
+enter_protected_mode:
+	mov eax, cr0
+	or eax, 1
+	mov cr0, eax
 	
 	ret
 	
 init_video_mode:
-	;; Set Video Mode
 	mov ah, 0h
-	mov al, 03h ; 03h For Text Mode. 13h For Graphics Mode.
+	mov al, 03h
 	int 10h
 	
-	;; Disable Text Cursor
 	mov ah, 01h
 	mov cx, 2000h
 	int 10h
 	
 	ret
-
-enter_protected_mode:
-	mov eax, cr0
-	or eax, 1
-	mov cr0, eax
+	
+setup_interrupts:
+	call remap_pic
+	call load_idt
 	
 	ret
 	
@@ -112,96 +98,29 @@ remap_pic:
 	; ... ;
 	
 	ret
-
+	
 load_idt:
 	lidt [idtr - start]
 	ret
 	
 load_task_register:
-	mov ax, 40d
-	ltr ax
-	
-	ret
+    mov ax, 40d
+    ltr ax
+    
+    ret
 	
 bits 32
-load_page_directory:
-	mov eax, [page_directory]
-	mov cr3, eax
-	
-	ret
-	
-enable_paging:
-	mov eax, cr0
-	or eax, 80000000h
-	mov cr0, eax
-	
-	ret
-	
-; --- ;
-
-; dev_write( int port, int cmd );
-dev_write:
-	push edx
-	push eax
-	
-	xor edx, edx
-	xor eax, eax
-	
-	mov dx, [esp + 12]
-	mov al, [esp + 16]
-	
-	out dx, al 
-	
-	pop eax
-	pop edx
-	
-	ret
-	
-dev_write_word:
-	push edx
-	push eax
-	
-	xor edx, edx
-	xor eax, eax
-	
-	mov dx, [esp + 12]
-	mov ax, [esp + 16]
-	
-	out dx, ax 
-	
-	pop eax
-	pop edx
-	
-	ret
-
-; dev_read( int port );
-dev_read:
-	push edx
-	
-	xor edx, edx
-	xor eax, eax
-	
-	mov dx, [esp + 8]
-	
-	in ax, dx
-	
-	;jmp $
-	
-	pop edx
-	
-	ret
-
 start_kernel:
 	mov eax, 10h
 	mov ds, eax
 	mov ss, eax
-	mov es, eax
-	
+    
 	mov eax, 0h
+	mov es, eax
 	mov fs, eax
 	mov gs, eax
 	
-	;sti ; TODO: I think we need to enable it. Does the multitasking work? 13 Nov 2022. Check if we enabled interrupts elsewhere?
+	sti
 	
 	call kernel_main
 	
@@ -209,4 +128,4 @@ start_kernel:
 %include "idt.asm"
 
 tss:
-	dd 0
+    dd 0
