@@ -1,0 +1,21 @@
+#define BASE_BLOCK_ADDRESS 100
+#define FILENAME_LENGTH 256
+
+typedef struct
+{
+	int head, tail;
+} base_block_t;
+
+typedef struct
+{
+	char filename[ FILENAME_LENGTH ];
+	int next_file_address;
+} metadata_t;
+
+base_block_t *base_block;
+
+void filesystem_init();
+int get_files_number();
+void create_file( char *, char * );
+char **list_files();
+char *read_file( char * );
