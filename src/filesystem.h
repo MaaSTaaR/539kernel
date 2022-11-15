@@ -15,7 +15,12 @@ typedef struct
 base_block_t *base_block;
 
 void filesystem_init();
-int get_files_number();
 void create_file( char *, char * );
 char **list_files();
 char *read_file( char * );
+
+// Auxiliary Functions
+metadata_t *load_metadata( int );
+int get_address_by_filename( char * );
+int get_prev_file_address( int );
+int get_files_number();

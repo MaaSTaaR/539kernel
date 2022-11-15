@@ -7,6 +7,8 @@ void processB();
 void processC();
 void processD();
 
+void print_fs();
+
 void kernel_main()
 {
 	heap_init();
@@ -28,14 +30,61 @@ void kernel_main()
 	process_create( &processC );
 	process_create( &processD );
 	
+	// ... //
+	
+	char *data = kalloc( 512 );
+	strcpy( data, "The content of the first file on 539filesystem" );	
+	create_file( "first_file", data );
+	
+	// ... //
+	
+	char *data2 = kalloc( 512 );
+	strcpy( data2, "SECOND FILE in 539filesystem" );
+	create_file( "second_file", data2 );
+	
+	// ... //
+	
+	char *data3 = kalloc( 512 );
+	strcpy( data3, "THIRD FILE in 539filesystem" );
+	create_file( "third_file", data3 );
+		
+	// ... //
+	
+	print( read_file( "first_file" ) ); println();
+	print( read_file( "second_file" ) ); println();
+	print( read_file( "third_file" ) ); println();
+	
+	// ... //
+	
+	print_fs();
+	delete_file( "first_file" );
+	print_fs();
+
+	// ... //
+	
 	while( 1 );
+}
+
+void print_fs()
+{
+	char **files = list_files();
+
+	for ( int currIdx = 0; currIdx < get_files_number(); currIdx++ )
+	{
+		print( "File: " );
+		print( files[ currIdx ] );
+		println();
+	}
+	
+	print( "==" );
+	println();
 }
 
 void interrupt_handler( int interrupt_number )
 {
-	println();
-	print( "Interrupt Received " );
-	printi( interrupt_number );
+	//println();
+	//print( "Interrupt Received " );
+	//printi( interrupt_number );
 }
 
 void processA()

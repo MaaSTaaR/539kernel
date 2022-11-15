@@ -47,33 +47,25 @@ void kernel_main()
 	// ... //
 	
 	char *data = kalloc( 512 );
-
-	strcpy( data, "The content of the first file on 539filesystem" );
-	
+	strcpy( data, "The content of the first file on 539filesystem" );	
 	create_file( "first_file", data );
 	
 	// ... //
 	
 	char *data2 = kalloc( 512 );
-
 	strcpy( data2, "SECOND FILE in 539filesystem" );
-	
 	create_file( "second_file", data2 );
 	
 	// ... //
 	
 	char *data3 = kalloc( 512 );
-
 	strcpy( data3, "THIRD FILE in 539filesystem" );
-	
 	create_file( "third_file", data3 );
 	
 	// ... //
 	
 	char *data4 = kalloc( 512 );
-
 	strcpy( data4, "FOURTH FILE in 539filesystem" );
-	
 	create_file( "fourth_file", data4 );
 	
 	// ... //

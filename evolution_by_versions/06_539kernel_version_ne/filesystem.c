@@ -39,20 +39,6 @@ void create_file( char *filename, char *buffer )
 	}
 }
 
-void update_base_block( int new_head, int new_tail )
-{
-	base_block->head = new_head;
-	base_block->tail = new_tail;
-	
-	write_disk( BASE_BLOCK_ADDRESS, base_block );
-}
-
-metadata_t *load_metadata( int address )
-{
-	metadata_t *metadata = read_disk( address );
-	
-	return metadata;
-}
 
 char **list_files()
 {
@@ -88,29 +74,7 @@ char **list_files()
 	return list;
 }
 
-int get_files_number()
-{
-	if ( base_block->head == 0 )
-		return 0;
-	
-	int files_number = 0;
-	
-	// ... //
-	
-	metadata_t *curr_file = load_metadata( base_block->head );
-	
-	while ( 1 )
-	{
-		files_number++;
 
-		if ( curr_file->next_file_address == 0 )
-			break;
-		
-		curr_file = load_metadata( curr_file->next_file_address );
-	}
-	
-	return files_number;
-}
 
 char *read_file( char *filename )
 {
@@ -124,27 +88,7 @@ char *read_file( char *filename )
 	return buffer;
 }
 
-int get_address_by_filename( char *filename )
-{
-	metadata_t *curr_file = load_metadata( base_block->head );
-	int curr_file_address = base_block->head;
-	
-	int idx = 0;
-	
-	while ( 1 )
-	{
-		if ( strcmp( curr_file->filename, filename ) == 1 )
-			return curr_file_address;
-			
-		if ( curr_file->next_file_address == 0 )
-			break;
-		
-		curr_file_address = curr_file->next_file_address;
-		curr_file = load_metadata( curr_file->next_file_address );		
-	}
-	
-	return 0;
-}
+
 
 void delete_file( char *filename )
 {	
@@ -187,6 +131,45 @@ void delete_file( char *filename )
 	}
 }
 
+// ... //
+
+void update_base_block( int new_head, int new_tail )
+{
+	base_block->head = new_head;
+	base_block->tail = new_tail;
+	
+	write_disk( BASE_BLOCK_ADDRESS, base_block );
+}
+
+metadata_t *load_metadata( int address )
+{
+	metadata_t *metadata = read_disk( address );
+	
+	return metadata;
+}
+
+int get_address_by_filename( char *filename )
+{
+	metadata_t *curr_file = load_metadata( base_block->head );
+	int curr_file_address = base_block->head;
+	
+	int idx = 0;
+	
+	while ( 1 )
+	{
+		if ( strcmp( curr_file->filename, filename ) == 1 )
+			return curr_file_address;
+			
+		if ( curr_file->next_file_address == 0 )
+			break;
+		
+		curr_file_address = curr_file->next_file_address;
+		curr_file = load_metadata( curr_file->next_file_address );		
+	}
+	
+	return 0;
+}
+
 int get_prev_file_address( int address )
 {
 	metadata_t *prev_file = load_metadata( base_block->head );
@@ -202,4 +185,28 @@ int get_prev_file_address( int address )
 	}
 		
 	return -1;
+}
+
+int get_files_number()
+{
+	if ( base_block->head == 0 )
+		return 0;
+	
+	int files_number = 0;
+	
+	// ... //
+	
+	metadata_t *curr_file = load_metadata( base_block->head );
+	
+	while ( 1 )
+	{
+		files_number++;
+
+		if ( curr_file->next_file_address == 0 )
+			break;
+		
+		curr_file = load_metadata( curr_file->next_file_address );
+	}
+	
+	return files_number;
 }
