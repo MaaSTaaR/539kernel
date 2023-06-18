@@ -49,7 +49,7 @@ KERNEL_OBJECT = -o kernel.elf
 build:
 	echo Please Choose Type
 
-kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
+kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILES)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
 	$(ASM) -f elf32 $(INIT_KERNEL_FILES) -o starter.o 
 	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
@@ -69,7 +69,7 @@ kernel: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
 	bochs -f bochs
 	#qemu-system-x86_64 -s kernel.img
 
-debug: $(BOOTSTRAP_FILE) $(KERNEL_FILE)
+debug: $(BOOTSTRAP_FILE) $(KERNEL_FILES)
 	$(ASM) -f bin $(BOOTSTRAP_FILE) -o bootstrap.o
 	$(ASM) -f elf32 $(INIT_KERNEL_FILES) -o starter.o 
 	$(CC) $(KERNEL_FLAGS) $(KERNEL_FILES) $(KERNEL_OBJECT)
